@@ -6,17 +6,36 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public class Main extends Application {
-
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../views/MainView.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
-        primaryStage.show();
+    public void start(Stage window) throws Exception{
+        Locale.setDefault(new Locale("fr", "CAN"));
+        Parent loginUI = null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/LoginForm.fxml"));
+            loginUI = loader.load();
+            switch (Locale.getDefault().getCountry().trim()) {
+                case "US":
+                    loader.setResources(ResourceBundle.getBundle("ResourceBundle/US", Locale.getDefault()));
+                    break;
+                case "MX":
+                    loader.setResources(ResourceBundle.getBundle("ResourceBundle/MX", Locale.getDefault()));
+                    break;
+                case "CAN":
+                    loader.setResources(ResourceBundle.getBundle("ResourceBundle/CAN", Locale.getDefault()));
+                    break;
+            }
+            window.setTitle(loader.getResources().getString("title"));
+            window.setScene(new Scene(loginUI, 600, 400));
+            window.show();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
-
-
     public static void main(String[] args) {
         launch(args);
     }
