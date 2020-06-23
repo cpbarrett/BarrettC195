@@ -5,7 +5,9 @@ import javafx.collections.ObservableList;
 
 public class CustomerList {
     private ObservableList<Customer> customerObservableList;
-    public CustomerList(){}
+    public CustomerList(){
+        this.customerObservableList = FXCollections.observableArrayList();
+    }
     public ObservableList<Customer> getCustomerObservableList() {
         return this.customerObservableList;
     }

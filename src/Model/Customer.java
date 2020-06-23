@@ -11,9 +11,9 @@ public class Customer {
 
     public Customer(int id, String firstName, String lastName, String phoneNumber){
         this.id = id;
-        this.firstName.set(firstName);
-        this.lastName.set(lastName);
-        this.phoneNumber.set(phoneNumber);
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
+        this.phoneNumber = new SimpleStringProperty(phoneNumber);
     }
     public int getId(){
         return id;

@@ -13,20 +13,20 @@ import java.util.ResourceBundle;
 public class Main extends Application {
     @Override
     public void start(Stage window) throws Exception{
-        Locale.setDefault(new Locale("fr", "CAN"));
+//        Locale.setDefault(new Locale("fr", "CAN"));
         Parent loginUI = null;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/LoginForm.fxml"));
             loginUI = loader.load();
             switch (Locale.getDefault().getCountry().trim()) {
-                case "US":
-                    loader.setResources(ResourceBundle.getBundle("ResourceBundle/US", Locale.getDefault()));
-                    break;
                 case "MX":
                     loader.setResources(ResourceBundle.getBundle("ResourceBundle/MX", Locale.getDefault()));
                     break;
                 case "CAN":
                     loader.setResources(ResourceBundle.getBundle("ResourceBundle/CAN", Locale.getDefault()));
+                    break;
+                default :
+                    loader.setResources(ResourceBundle.getBundle("ResourceBundle/US", Locale.getDefault()));
                     break;
             }
             window.setTitle(loader.getResources().getString("title"));
