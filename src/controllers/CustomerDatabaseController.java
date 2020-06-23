@@ -1,12 +1,8 @@
 package controllers;
 
 import Model.Customer;
-import Model.CustomerList;
-import Model.CustomerDatabase;
-import Model.CustomerList;
-import com.sun.org.apache.xml.internal.utils.res.XResourceBundle;
+import Model.CustomerDatabaseModel;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,8 +20,6 @@ import main.AlertUser;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
 public class CustomerDatabaseController implements Initializable {
@@ -40,7 +34,7 @@ public class CustomerDatabaseController implements Initializable {
     public void initialize(URL location, ResourceBundle rb) {
         this.rb = rb;
         createTable();
-//        Connection connect = CustomerDatabase.getConnected();
+//        Connection connect = CustomerDatabaseModel.getConnected();
 //        ResultSet rs = connect.createStatement().executeQuery("SELECT * FROM *");
 
 //        while(rs.next()){
@@ -52,14 +46,14 @@ public class CustomerDatabaseController implements Initializable {
         lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        customers.setItems(CustomerDatabase.getCustomerList().getAllCustomers());
+        customers.setItems(CustomerDatabaseModel.getCustomerList().getAllCustomers());
     }
     @FXML
     private void searchCustomerAction(ActionEvent actionEvent){
         try {
-            customers.setItems((ObservableList) CustomerDatabase.getCustomerList().lookupCustomer(Integer.parseInt(searchField.getText().trim())));
+            customers.setItems((ObservableList) CustomerDatabaseModel.getCustomerList().lookupCustomer(Integer.parseInt(searchField.getText().trim())));
         } catch (NumberFormatException e) {
-            customers.setItems(CustomerDatabase.getCustomerList().lookupCustomer(searchField.getText().trim()));
+            customers.setItems(CustomerDatabaseModel.getCustomerList().lookupCustomer(searchField.getText().trim()));
         }
     }
 
@@ -81,7 +75,7 @@ public class CustomerDatabaseController implements Initializable {
     @FXML
     private void deleteCustomerAction(ActionEvent actionEvent){
         if (AlertUser.confirmDelete(rb.getString("alertDelete"), rb.getString("alertDeleteMessage"))){
-            CustomerDatabase.getCustomerList().deleteCustomer((Customer) customers.getSelectionModel().getSelectedItem());
+            CustomerDatabaseModel.getCustomerList().deleteCustomer((Customer) customers.getSelectionModel().getSelectedItem());
         }
     }
     private void openNewWindow(ActionEvent event, Parent newUI) throws IOException {

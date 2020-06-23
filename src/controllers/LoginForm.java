@@ -40,7 +40,7 @@ public class LoginForm implements Initializable {
     @FXML
     private void openNewWindow(ActionEvent event) throws IOException {
             if (checkLogin(username.getText().trim(), password.getText().trim())) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/Customers.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/CustomerDatabaseView.fxml"));
                 Parent customerUI = loader.load();
                 Scene scene = new Scene(customerUI);
                 Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();

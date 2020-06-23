@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class CustomerDatabase {
+public class CustomerDatabaseModel {
     private static CustomerList customerList;
     public static void createCustomerList(){
         customerList = new CustomerList();

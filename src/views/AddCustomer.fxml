@@ -28,8 +28,8 @@
          <children>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
               <buttons>
-                <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Save" />
-                  <Button fx:id="cancelButton" layoutX="235.0" layoutY="48.0" mnemonicParsing="false" text="Cancel" />
+                <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Save" onAction="#saveCustomer"/>
+                  <Button fx:id="cancelButton" layoutX="235.0" layoutY="48.0" mnemonicParsing="false" text="Cancel" onAction="#cancelCustomer"/>
               </buttons>
                <GridPane.margin>
                   <Insets right="50.0" />
