@@ -8,29 +8,37 @@ public class CustomerList {
     public CustomerList(){
         this.customerObservableList = FXCollections.observableArrayList();
     }
-    public ObservableList<Customer> getCustomerObservableList() {
-        return this.customerObservableList;
-    }
     public boolean addCustomer(Customer customer){
-        return this.customerObservableList.add(customer);
+        return customerObservableList.add(customer);
     }
-    public Customer deleteCustomer(int id){
-        return this.customerObservableList.remove(id);
+    public boolean deleteCustomer(Customer customer){
+        if (customerObservableList.contains(customer)){
+            customerObservableList.remove(customer.getId());
+            return true;
+        } else {
+            return false;
+        }
     }
     public void updateCustomer(int id, Customer customer){
-        this.customerObservableList.add(id, customer);
+        if (customerObservableList.contains(customer)) {
+            customerObservableList.set(id, customer);
+        } else {
+            customerObservableList.add(id, customer);
+        }
     }
     public Customer lookupCustomer(int id){
-        return this.customerObservableList.get(id);
+        return customerObservableList.get(id);
     }
-    public ObservableList<Customer> lookupCustomer(Customer customer){
+    public ObservableList<Customer> lookupCustomer(String name){
         ObservableList<Customer> matchingCustomers = FXCollections.observableArrayList();
-        for(Customer match : this.customerObservableList){
-            if (match.getFirstName().contains(customer.getFirstName()) || match.getLastName().contains(customer.getLastName())){
+        for(Customer match : customerObservableList){
+            if (match.getFirstName().contains(name) || match.getLastName().contains(name)){
                 matchingCustomers.add(match);
             }
         }
         return matchingCustomers;
     }
-
+    public ObservableList<Customer> getAllCustomers() {
+        return customerObservableList;
+    }
 }

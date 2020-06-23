@@ -5,7 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class CustomerDatabase {
-    private static CustomerList customerList = new CustomerList();
+    private static CustomerList customerList;
+    public static void createCustomerList(){
+        customerList = new CustomerList();
+    }
     public static CustomerList getCustomerList(){
         return customerList;
     }
