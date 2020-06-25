@@ -39,16 +39,11 @@ public class CustomerDatabaseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle rb) {
         this.rb = rb;
-        try {
             if (!CustomerDatabaseModel.isConnected()) {
                 CustomerDatabaseModel.getConnected();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         createTable();
     }
-
     private void createTable(){
         customerId.setCellValueFactory(new PropertyValueFactory<>("id"));
         customerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));

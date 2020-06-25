@@ -1,6 +1,10 @@
 package Model;
 
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 public class CustomerDatabaseModel {
     private static CustomerList customerList;
@@ -20,16 +24,19 @@ public class CustomerDatabaseModel {
     public static boolean isConnected(){
         return connected;
     }
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("DMI_CONSTANT_DB_PASSWORD")
-    public static void getConnected() throws SQLException {
-        final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-        final String DB_URL = "jdbc:mysql://3.227.166.251/U07Stq";
-        final String DB_USER = "U07Stq";
-        final String DB_PASS = "53689117803";
+    public static void getConnected() {
+        MysqlDataSource dataSource = new MysqlDataSource();
+        Properties properties = new Properties();
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            FileInputStream fileInputStream = new FileInputStream("src/ResourceBundle/db.properties");
+            properties.load(fileInputStream);
+            dataSource.setURL(properties.getProperty("MYSQL_DB_URL"));
+            dataSource.setUser(properties.getProperty("MYSQL_DB_USERNAME"));
+            dataSource.setPassword(properties.getProperty("MYSQL_DB_PASSWORD"));
+
+            Class.forName(properties.getProperty("MYSQL_DB_DRIVER_CLASS"));
             System.out.println("Connecting to database...");
-            connect = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+            connect = dataSource.getConnection();
             ResultSet rs = connect.createStatement().executeQuery(
                     "select customer.customerId, customer.customerName, address.address, city.city, country.country, address.postalCode, address.phone from customer\n" +
                             "inner join address on address.addressId = customer.addressId\n" +
@@ -63,24 +70,25 @@ public class CustomerDatabaseModel {
             Customer sample = new Customer(customerList.getAllCustomers().size()+1,"Jose Cuervo",
                     "123 Calle","Mexico City", "Mexico", 10000, "000-0000");
             insertNewCustomer(sample);
-        } catch (SQLException | ClassNotFoundException e) {
+            fileInputStream.close();
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
     }
     public static void insertNewCustomer(Customer customer){
         customerList.addCustomer(customer);
         try {
-            String sql = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdateBy) VALUES\n" +
+            final String insertAddress = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdateBy) VALUES\n" +
                     "('" + customer.getAddress() + "' , ' ', " + locationList.lookupCity(customer.getCity()).getCityId() + ", " +
                     customer.getPostalCode() + ", '" + customer.getPhoneNumber() + "', now(), 'U07Stq', 'U07Stq');";
-            PreparedStatement ps = connect.prepareStatement(sql);
+            PreparedStatement ps = connect.prepareStatement(insertAddress);
             ps.execute();
             ps = connect.prepareStatement("SELECT LAST_INSERT_ID() FROM address");
             ResultSet rs = ps.executeQuery();
             rs.next();
-            sql = "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdateBy) VALUES\n" +
+            final String insertCustomer = "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdateBy) VALUES\n" +
             "('" + customer.getCustomerName() + "', " + Integer.parseInt(rs.getString(1)) + ", 1, now(), 'U07Stq', 'U07Stq');";
-            ps = connect.prepareStatement(sql);
+            ps = connect.prepareStatement(insertCustomer);
             ps.execute();
         } catch (SQLException ex) { //logging?
             ex.printStackTrace();
@@ -88,9 +96,9 @@ public class CustomerDatabaseModel {
     }
     public static void deleteCustomerDB(Customer customer){
         customerList.deleteCustomer(customer);
-        String sql = "DELETE FROM customer WHERE customerId = " + customer.getId() + ";";
+        final String sqlDelete = "DELETE FROM customer WHERE customerId = " + customer.getId() + ";";
         try {
-            PreparedStatement ps = connect.prepareStatement(sql);
+            PreparedStatement ps = connect.prepareStatement(sqlDelete);
             ps.execute();
         } catch (SQLException ex) { //logging?
             ex.printStackTrace();
@@ -98,9 +106,6 @@ public class CustomerDatabaseModel {
     }
     public static void updateCustomerDB(Customer customer){
         customerList.updateCustomer(customer.getId()-1, customer);
-//        String addressId = "REPLACE INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdateBy)" +
-//                " VALUES \n" + "('" + customer.getAddress() + "' , ' ', " + locationList.lookupCity(customer.getCity()).getCityId() +
-//                ", " + customer.getPostalCode() + ", '" + customer.getPhoneNumber() + "', now(), 'U07Stq', 'U07Stq');";
         try {
             String sql = "UPDATE address SET " +
                     "address = '" + customer.getAddress() + "', " +
