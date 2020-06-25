@@ -51,7 +51,7 @@ public class AlertUser {
         });
 
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(label,yesButton);
+        layout.getChildren().addAll(label, yesButton, noButton);
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout);

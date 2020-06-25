@@ -1,5 +1,7 @@
 package main;
 
+import Model.CustomerDatabaseModel;
+import controllers.CustomerDatabaseController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +15,7 @@ import java.util.ResourceBundle;
 public class Main extends Application {
     @Override
     public void start(Stage window) throws Exception{
+        CustomerDatabaseModel.createCustomerList();
 //        Locale.setDefault(new Locale("fr", "CAN"));
         Parent loginUI = null;
         try {

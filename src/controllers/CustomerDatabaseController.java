@@ -2,7 +2,6 @@ package controllers;
 
 import Model.Customer;
 import Model.CustomerDatabaseModel;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,38 +19,50 @@ import main.AlertUser;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CustomerDatabaseController implements Initializable {
-    @FXML private TableView customers;
-    @FXML private TableColumn<Customer, SimpleStringProperty> lastName;
-    @FXML private TableColumn<Customer, SimpleStringProperty> firstName;
-    @FXML private TableColumn<Customer, SimpleStringProperty> phoneNumber;
+    @FXML private TableView<Customer> customers;
+    @FXML private TableColumn<Customer, Integer> customerId;
+    @FXML private TableColumn<Customer, String> customerName;
+    @FXML private TableColumn<Customer, String> customerAddress;
+    @FXML private TableColumn<Customer, String> customerCity;
+    @FXML private TableColumn<Customer, String> customerCountry;
+    @FXML private TableColumn<Customer, String> customerPostalCode;
+    @FXML private TableColumn<Customer, String> customerPhoneNumber;
     @FXML private TextField searchField;
     private ResourceBundle rb;
 
     @Override
     public void initialize(URL location, ResourceBundle rb) {
         this.rb = rb;
+        try {
+            if (!CustomerDatabaseModel.isConnected()) {
+                CustomerDatabaseModel.getConnected();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         createTable();
-//        Connection connect = CustomerDatabaseModel.getConnected();
-//        ResultSet rs = connect.createStatement().executeQuery("SELECT * FROM *");
-
-//        while(rs.next()){
-//            customerData.add()
-//        }
     }
 
     private void createTable(){
-        lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        customerId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        customerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        customerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        customerCity.setCellValueFactory(new PropertyValueFactory<>("city"));
+        customerCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
+        customerPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        customerPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         customers.setItems(CustomerDatabaseModel.getCustomerList().getAllCustomers());
     }
     @FXML
-    private void searchCustomerAction(ActionEvent actionEvent){
+    private void searchCustomerAction(){
         try {
-            customers.setItems((ObservableList) CustomerDatabaseModel.getCustomerList().lookupCustomer(Integer.parseInt(searchField.getText().trim())));
+            customers.setItems((ObservableList<Customer>) CustomerDatabaseModel.getCustomerList().lookupCustomer(Integer.parseInt(searchField.getText().trim())));
         } catch (NumberFormatException e) {
             customers.setItems(CustomerDatabaseModel.getCustomerList().lookupCustomer(searchField.getText().trim()));
         }
@@ -69,13 +80,14 @@ public class CustomerDatabaseController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/AddCustomer.fxml"));
         Parent customerUI = loader.load();
         CustomerController customerController = loader.getController();
+        customerController.loadCustomer(customers.getSelectionModel().getSelectedItem());
         openNewWindow(actionEvent, customerUI);
     }
 
     @FXML
     private void deleteCustomerAction(ActionEvent actionEvent){
-        if (AlertUser.confirmDelete(rb.getString("alertDelete"), rb.getString("alertDeleteMessage"))){
-            CustomerDatabaseModel.getCustomerList().deleteCustomer((Customer) customers.getSelectionModel().getSelectedItem());
+        if (AlertUser.confirmDelete("Confirm Delete?", "Are you sure you want to delete this customer?")){
+            CustomerDatabaseModel.deleteCustomerDB(customers.getSelectionModel().getSelectedItem());
         }
     }
     private void openNewWindow(ActionEvent event, Parent newUI) throws IOException {

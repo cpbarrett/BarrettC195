@@ -13,17 +13,17 @@ public class CustomerList {
     }
     public boolean deleteCustomer(Customer customer){
         if (customerObservableList.contains(customer)){
-            customerObservableList.remove(customer.getId());
+            customerObservableList.remove(customer);
             return true;
         } else {
             return false;
         }
     }
     public void updateCustomer(int id, Customer customer){
-        if (customerObservableList.contains(customer)) {
+        if (customerObservableList.get(id).getId()-1 == id) {
             customerObservableList.set(id, customer);
         } else {
-            customerObservableList.add(id, customer);
+            customerObservableList.add(customer);
         }
     }
     public Customer lookupCustomer(int id){
@@ -32,7 +32,7 @@ public class CustomerList {
     public ObservableList<Customer> lookupCustomer(String name){
         ObservableList<Customer> matchingCustomers = FXCollections.observableArrayList();
         for(Customer match : customerObservableList){
-            if (match.getFirstName().contains(name) || match.getLastName().contains(name)){
+            if (match.getCustomerName().toLowerCase().contains(name.toLowerCase())){
                 matchingCustomers.add(match);
             }
         }
