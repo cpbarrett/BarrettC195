@@ -1,5 +1,8 @@
 package Model;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class Customer {
     private int id;
     private String customerName;
@@ -8,6 +11,7 @@ public class Customer {
     private String country;
     private int postalCode;
     private String phoneNumber;
+    private ObservableList<Appointment> customerAppointments;
 
     public Customer(int id, String customerName, String address, String city, String country, int postalCode, String phoneNumber){
         this.id = id;
@@ -17,14 +21,11 @@ public class Customer {
         this. country = country;
         this.postalCode = postalCode;
         this.phoneNumber = phoneNumber;
+        customerAppointments = FXCollections.observableArrayList();
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getCustomerName() {
@@ -73,5 +74,9 @@ public class Customer {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public ObservableList<Appointment> getCustomerAppointments() {
+        return customerAppointments;
     }
 }
