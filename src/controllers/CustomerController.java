@@ -30,11 +30,8 @@ public class CustomerController implements Initializable {
     @FXML ChoiceBox<String> customerCityChoice;
     @FXML TextField customerPostalCodeField;
     @FXML TextField phoneNumberField;
-
-    ResourceBundle rb;
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        this.rb = rb;
         loadCityChoices();
     }
 
@@ -119,7 +116,6 @@ public class CustomerController implements Initializable {
             Integer.parseInt(customerPostalCodeField.getText().trim());
         } catch (NumberFormatException e) {
             AlertUser.showError("Please be sure that your postal code is a 5 digit number like: 12345");
-            e.getCause();
             return false;
         }
         try {
@@ -146,7 +142,6 @@ public class CustomerController implements Initializable {
             }
         } catch (NullPointerException e){
             AlertUser.showError("Please ensure no categories are blank.");
-            e.getCause();
             return false;
         }
         return true;

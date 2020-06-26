@@ -1,9 +1,13 @@
 package Model;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class CustomerDatabaseModel {
@@ -71,6 +75,7 @@ public class CustomerDatabaseModel {
                     "123 Calle","Mexico City", "Mexico", 10000, "000-0000");
             insertNewCustomer(sample);
             fileInputStream.close();
+            rs.close();
         } catch (SQLException | ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
@@ -90,6 +95,8 @@ public class CustomerDatabaseModel {
             "('" + customer.getCustomerName() + "', " + Integer.parseInt(rs.getString(1)) + ", 1, now(), 'U07Stq', 'U07Stq');";
             ps = connect.prepareStatement(insertCustomer);
             ps.execute();
+            ps.close();
+            rs.close();
         } catch (SQLException ex) { //logging?
             ex.printStackTrace();
         }
@@ -127,6 +134,8 @@ public class CustomerDatabaseModel {
                     "WHERE customerId = " + customer.getId() + ";";
             ps = connect.prepareStatement(sqlUpdateCustomer);
             ps.execute();
+            ps.close();
+            rs.close();
         } catch (SQLException ex) { //logging?
             ex.printStackTrace();
         }

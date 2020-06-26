@@ -19,9 +19,6 @@ import main.AlertUser;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CustomerDatabaseController implements Initializable {
@@ -34,11 +31,9 @@ public class CustomerDatabaseController implements Initializable {
     @FXML private TableColumn<Customer, String> customerPostalCode;
     @FXML private TableColumn<Customer, String> customerPhoneNumber;
     @FXML private TextField searchField;
-    private ResourceBundle rb;
 
     @Override
     public void initialize(URL location, ResourceBundle rb) {
-        this.rb = rb;
             if (!CustomerDatabaseModel.isConnected()) {
                 CustomerDatabaseModel.getConnected();
             }
