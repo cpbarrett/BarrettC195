@@ -96,10 +96,11 @@ public class CustomerDatabaseModel {
     }
     public static void deleteCustomerDB(Customer customer){
         customerList.deleteCustomer(customer);
-        final String sqlDelete = "DELETE FROM customer WHERE customerId = " + customer.getId() + ";";
+        final String sqlDeleteCustomer = "DELETE FROM customer WHERE customerId = " + customer.getId() + ";";
+        final String sqlDeleteAddress = "DELETE FROM address WHERE addressId = " + customer.getId() + ";";
         try {
-            PreparedStatement ps = connect.prepareStatement(sqlDelete);
-            ps.execute();
+            connect.createStatement().execute(sqlDeleteCustomer);
+            connect.createStatement().execute(sqlDeleteAddress);
         } catch (SQLException ex) { //logging?
             ex.printStackTrace();
         }
@@ -107,24 +108,24 @@ public class CustomerDatabaseModel {
     public static void updateCustomerDB(Customer customer){
         customerList.updateCustomer(customer.getId()-1, customer);
         try {
-            String sql = "UPDATE address SET " +
+            final String sqlUpdateAddress = "UPDATE address SET " +
                     "address = '" + customer.getAddress() + "', " +
                     "cityId = " + locationList.lookupCity(customer.getCity()).getCityId() + ", " +
                     "postalCode = " + customer.getPostalCode() + ", " +
                     "phone = '" + customer.getPhoneNumber() + "', " +
                     "lastUpdateBy = 'U07Stq'" +
                    "WHERE addressId = " + customer.getId() + ";";
-            PreparedStatement ps = connect.prepareStatement(sql);
+            PreparedStatement ps = connect.prepareStatement(sqlUpdateAddress);
             ps.execute();
             ps = connect.prepareStatement("SELECT LAST_INSERT_ID() FROM address");
             ResultSet rs = ps.executeQuery();
             rs.next();
-            sql = "UPDATE customer SET " +
+            final String sqlUpdateCustomer = "UPDATE customer SET " +
                     "customerName = '" + customer.getCustomerName() + "', " +
                     "addressId = " + Integer.parseInt(rs.getString(1)) + ", " +
                     "active = 1, createDate = now(), createdBy = 'U07Stq', lastUpdateBy = 'U07Stq'" +
                     "WHERE customerId = " + customer.getId() + ";";
-            ps = connect.prepareStatement(sql);
+            ps = connect.prepareStatement(sqlUpdateCustomer);
             ps.execute();
         } catch (SQLException ex) { //logging?
             ex.printStackTrace();

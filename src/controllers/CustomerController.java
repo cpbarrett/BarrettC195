@@ -65,20 +65,21 @@ public class CustomerController implements Initializable {
 
     @FXML
     private void saveCustomer(ActionEvent actionEvent) throws IOException {
-        String selectedCity = customerCityChoice.getSelectionModel().getSelectedItem();
-        City choice = CustomerDatabaseModel.getLocationList().lookupCity(selectedCity);
-        Customer newCustomer = new Customer(
-                CustomerDatabaseModel.getCustomerList().getAllCustomers().size()+1,
-                customerNameField.getText(),
-                customerAddressField.getText(),
-                choice.getCityName(),
-                choice.getCountry(),
-                Integer.parseInt(customerPostalCodeField.getText()),
-                phoneNumberField.getText()
-        );
-        CustomerDatabaseModel.insertNewCustomer(newCustomer);
-        exitWindow(actionEvent);
-
+        if (validateCustomerEntry()) {
+            String selectedCity = customerCityChoice.getSelectionModel().getSelectedItem();
+            City choice = CustomerDatabaseModel.getLocationList().lookupCity(selectedCity);
+            Customer newCustomer = new Customer(
+                    CustomerDatabaseModel.getCustomerList().getAllCustomers().size() + 1,
+                    customerNameField.getText(),
+                    customerAddressField.getText(),
+                    choice.getCityName(),
+                    choice.getCountry(),
+                    Integer.parseInt(customerPostalCodeField.getText()),
+                    phoneNumberField.getText()
+            );
+            CustomerDatabaseModel.insertNewCustomer(newCustomer);
+            exitWindow(actionEvent);
+        }
     }
     @FXML
     private void cancelCustomer(ActionEvent actionEvent) throws IOException {
@@ -88,19 +89,21 @@ public class CustomerController implements Initializable {
     }
     @FXML
     private void updateCustomer(ActionEvent actionEvent) throws IOException {
-        String selectedCity = customerCityChoice.getSelectionModel().getSelectedItem();
-        City choice = CustomerDatabaseModel.getLocationList().lookupCity(selectedCity);
-        Customer updatedCustomer = new Customer(
-                Integer.parseInt(customerIdField.getText()),
-                customerNameField.getText(),
-                customerAddressField.getText(),
-                choice.getCityName(),
-                choice.getCountry(),
-                Integer.parseInt(customerPostalCodeField.getText()),
-                phoneNumberField.getText()
-        );
-        CustomerDatabaseModel.updateCustomerDB(updatedCustomer);
-        exitWindow(actionEvent);
+        if (validateCustomerEntry()) {
+            String selectedCity = customerCityChoice.getSelectionModel().getSelectedItem();
+            City choice = CustomerDatabaseModel.getLocationList().lookupCity(selectedCity);
+            Customer updatedCustomer = new Customer(
+                    Integer.parseInt(customerIdField.getText()),
+                    customerNameField.getText(),
+                    customerAddressField.getText(),
+                    choice.getCityName(),
+                    choice.getCountry(),
+                    Integer.parseInt(customerPostalCodeField.getText()),
+                    phoneNumberField.getText()
+            );
+            CustomerDatabaseModel.updateCustomerDB(updatedCustomer);
+            exitWindow(actionEvent);
+        }
     }
     private void exitWindow(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/CustomerDatabaseView.fxml"));
@@ -110,5 +113,42 @@ public class CustomerController implements Initializable {
         window.setTitle("Customers");
         window.setScene(scene);
         window.show();
+    }
+    private boolean validateCustomerEntry() {
+        try {
+            Integer.parseInt(customerPostalCodeField.getText().trim());
+        } catch (NumberFormatException e) {
+            AlertUser.showError("Please be sure that your postal code is a 5 digit number like: 12345");
+            e.getCause();
+            return false;
+        }
+        try {
+            String validName = customerNameField.getText();
+            String validAddress = customerAddressField.getText();
+            String validCity = customerCityChoice.getSelectionModel().getSelectedItem();
+            String validPostalCode = customerPostalCodeField.getText();
+            String validNumber = phoneNumberField.getText();
+            if (validName.isEmpty() || validAddress.isEmpty() || validCity.isEmpty() || validNumber.isEmpty()) {
+                NullPointerException nullPointerException = new NullPointerException();
+                throw nullPointerException;
+            }
+            if (validAddress.length() > 50) {
+                AlertUser.showError("Address is too long.");
+                return false;
+            }
+            if (validName.length() > 45) {
+                AlertUser.showError("Phone Number is too long.");
+                return false;
+            }
+            if (validPostalCode.length() > 10) {
+                AlertUser.showError("Postal code is too long.");
+                return false;
+            }
+        } catch (NullPointerException e){
+            AlertUser.showError("Please ensure no categories are blank.");
+            e.getCause();
+            return false;
+        }
+        return true;
     }
 }

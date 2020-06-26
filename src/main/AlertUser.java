@@ -59,5 +59,23 @@ public class AlertUser {
         window.showAndWait();
         return confirm.get();
     }
+    public static void showError(String message){
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle("Error!");
+        window.setMinWidth(300);
+
+        Label label = new Label(message);
+        Button closeButton = new Button("OK");
+        closeButton.setOnAction(e -> window.close());
+
+        VBox layout = new VBox(10);
+        layout.getChildren().addAll(label,closeButton);
+        layout.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(layout);
+        window.setScene(scene);
+        window.showAndWait();
+    }
 }
 
