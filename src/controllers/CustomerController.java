@@ -98,8 +98,10 @@ public class CustomerController implements Initializable {
                     Integer.parseInt(customerPostalCodeField.getText()),
                     phoneNumberField.getText()
             );
-            CustomerDatabaseModel.updateCustomerDB(updatedCustomer);
-            exitWindow(actionEvent);
+            if (AlertUser.confirmDelete("Confirm Update?", "Are you sure you want to update this customer?")){
+                CustomerDatabaseModel.updateCustomerDB(updatedCustomer);
+                exitWindow(actionEvent);
+            }
         }
     }
     private void exitWindow(ActionEvent actionEvent) throws IOException {

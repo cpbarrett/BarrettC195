@@ -31,9 +31,10 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
                     <buttons>
                         <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveAppointment" text="Save" />
                         <Button fx:id="cancelButton" layoutX="235.0" layoutY="48.0" mnemonicParsing="false" onAction="#cancelAppointment" text="Cancel" />
@@ -47,7 +48,7 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="customerNameAppt" disable="true" editable="false" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <TextField fx:id="appointmentCustomerName" disable="true" editable="false" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <padding>
                         <Insets bottom="10.0" />
                     </padding>
@@ -58,7 +59,7 @@
                         <Font size="14.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="apptTypeField" layoutX="360.0" layoutY="147.0" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                <TextField fx:id="apptTypeField" layoutX="360.0" layoutY="147.0" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                     <padding>
                         <Insets bottom="10.0" />
                     </padding>
@@ -74,7 +75,7 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="110.0" prefHeight="101.0" prefWidth="300.0" text="Type" GridPane.rowIndex="5">
+                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="110.0" prefHeight="101.0" prefWidth="300.0" text="Type" GridPane.rowIndex="6">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -106,22 +107,22 @@
                         <Insets left="50.0" right="50.0" />
                     </GridPane.margin>
                 </TextField>
-                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="300.0" text="Location" GridPane.rowIndex="3">
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="300.0" text="Location" GridPane.rowIndex="4">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <ChoiceBox fx:id="apptLocationChoice" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                <ChoiceBox fx:id="apptLocationChoice" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <GridPane.margin>
                         <Insets left="50.0" />
                     </GridPane.margin>
                 </ChoiceBox>
-                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="300.0" text="Contact" GridPane.rowIndex="4">
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="300.0" text="Contact" GridPane.rowIndex="5">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="apptContactField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                <TextField fx:id="apptContactField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <padding>
                         <Insets bottom="10.0" />
                     </padding>
@@ -132,17 +133,17 @@
                         <Insets left="50.0" right="50.0" />
                     </GridPane.margin>
                 </TextField>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="300.0" text="URL" GridPane.rowIndex="6">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="300.0" text="URL" GridPane.rowIndex="7">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="300.0" text="Date" GridPane.rowIndex="7">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="300.0" text="Date" GridPane.rowIndex="8">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="apptURLField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <TextField fx:id="apptURLField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <padding>
                   <Insets bottom="10.0" />
                </padding>
@@ -153,7 +154,7 @@
                   <Insets left="50.0" right="50.0" />
                </GridPane.margin>
             </TextField>
-            <TextField fx:id="phoneNumberField21" onAction="#apptTimeField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+            <TextField fx:id="apptTimeField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
                <padding>
                   <Insets bottom="10.0" />
                </padding>
@@ -164,16 +165,32 @@
                   <Insets left="50.0" right="50.0" />
                </GridPane.margin>
             </TextField>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="300.0" text="Time" GridPane.rowIndex="8">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="300.0" text="Time" GridPane.rowIndex="9">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <DatePicker fx:id="apptDateChoice" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <DatePicker fx:id="apptDateChoice" GridPane.columnIndex="1" GridPane.rowIndex="8">
                <GridPane.margin>
                   <Insets left="50.0" />
                </GridPane.margin>
             </DatePicker>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="300.0" text="Description" GridPane.rowIndex="3">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="appointmentDescriptionField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="50.0" right="50.0" />
+               </GridPane.margin>
+            </TextField>
             </children>
         </GridPane>
     </children>

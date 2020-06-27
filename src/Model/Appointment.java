@@ -1,6 +1,7 @@
 package Model;
 
-import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Appointment {
     private int id;
@@ -11,11 +12,10 @@ public class Appointment {
     private String contact;
     private String type;
     private String url;
-//    private Time startTime;
-//    private Time endTime;
+    private String startTime;
+    private String endTime;
 
-
-    public Appointment(int id, Customer associatedCustomer, String title, String description, String location, String contact, String type, String url) {
+    public Appointment(int id, Customer associatedCustomer, String title, String description, String location, String contact, String type, String url, String startTime, String endTime) {
         this.id = id;
         this.associatedCustomer = associatedCustomer;
         this.title = title;
@@ -24,6 +24,24 @@ public class Appointment {
         this.contact = contact;
         this.type = type;
         this.url = url;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public int getId() {
@@ -37,6 +55,7 @@ public class Appointment {
     public Customer getAssociatedCustomer() {
         return associatedCustomer;
     }
+    public String getName(){ return this.associatedCustomer.getCustomerName();}
 
     public void setAssociatedCustomer(Customer associatedCustomer) {
         this.associatedCustomer = associatedCustomer;
@@ -88,5 +107,21 @@ public class Appointment {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+    @Override
+    public String toString(){
+        List<String> string = new ArrayList<>();
+        string.add(this.getAssociatedCustomer().getId() +"");
+        string.add("test");
+        string.add(this.title);
+        string.add(this.description);
+        string.add(this.location);
+        string.add(this.contact);
+        string.add(this.type);
+        string.add(this.url);
+        string.add(this.startTime);
+        string.add(this.endTime);
+        String sql = string.toString();
+        return  sql.substring(1,sql.length()-1);
     }
 }

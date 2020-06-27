@@ -69,6 +69,24 @@ public class CustomerDatabaseModel {
                         rs.getString("country")
                 ));
             }
+            rs = connect.createStatement().executeQuery(
+                    "SELECT appointmentId, customerId, title, description, location,  contact, 'type', url, 'start', 'end' FROM appointment;"
+            );
+            while (rs.next()){
+                customerList.lookupCustomer(Integer.parseInt(rs.getString("customerId"))-1).addAppointment(
+                    (new Appointment(
+                            Integer.parseInt(rs.getString("appointmentId")),
+                            customerList.lookupCustomer(Integer.parseInt(rs.getString("customerId"))),
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getString("location"),
+                            rs.getString("contact"),
+                            rs.getString("type"),
+                            rs.getString("url"),
+                            rs.getString("start"),
+                            rs.getString("end")
+                )));
+            }
             System.out.println("Connection Successful!");
             connected = true;
             Customer sample = new Customer(customerList.getAllCustomers().size()+1,"Jose Cuervo",
@@ -79,6 +97,20 @@ public class CustomerDatabaseModel {
         } catch (SQLException | ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
+    }
+    public static void makeNewAppointment(Appointment appointment){
+        int customerId = appointment.getAssociatedCustomer().getId();
+        try{
+            final String insertAppointment = "INSERT INTO appointment VALUES" +
+                    "(3," + customerId + ", 1, '" + appointment.getTitle() + "', '" + appointment.getDescription() + "', '" +
+                    appointment.getLocation() + "', '" + appointment.getContact() + "', '" + appointment.getType() + "', '" +
+                    appointment.getUrl() + "', now(), now(), now(), 'U07Stq', now(), 'U07Stq');";
+            PreparedStatement ps = connect.prepareStatement(insertAppointment);
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        customerList.lookupCustomer(customerId).addAppointment(appointment);
     }
     public static void insertNewCustomer(Customer customer){
         customerList.addCustomer(customer);

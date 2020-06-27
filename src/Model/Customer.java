@@ -79,4 +79,10 @@ public class Customer {
     public ObservableList<Appointment> getCustomerAppointments() {
         return customerAppointments;
     }
+    public boolean addAppointment(Appointment appointment){
+        return this.customerAppointments.add(appointment);
+    }
+    public boolean deleteAppointment(Appointment appointment){
+        return this.customerAppointments.remove(appointment);
+    }
 }

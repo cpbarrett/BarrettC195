@@ -80,6 +80,16 @@ public class CustomerDatabaseController implements Initializable {
             CustomerDatabaseModel.deleteCustomerDB(customers.getSelectionModel().getSelectedItem());
         }
     }
+    @FXML
+    private void viewAppointments(ActionEvent actionEvent) throws IOException {
+        if (!customers.getSelectionModel().isEmpty()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/CustomerAppointments.fxml"));
+            Parent appointmentsUI = loader.load();
+            AppointmentsController appointmentsController = loader.getController();
+            appointmentsController.loadCustomer(customers.getSelectionModel().getSelectedItem());
+            openNewWindow(actionEvent, appointmentsUI);
+        }
+    }
     private void openNewWindow(ActionEvent event, Parent newUI) throws IOException {
         Scene scene = new Scene(newUI);
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
