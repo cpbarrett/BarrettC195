@@ -4,17 +4,27 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Properties;
 
 public class CustomerDatabaseModel {
     private static CustomerList customerList;
     private static LocationList locationList;
+    private static int appointmentTotal = 1;
     private static boolean connected = false;
     private static Connection connect;
+    public static int getAppointmentTotal(){
+        return appointmentTotal;
+    }
+    public static Connection getConnection(){
+        return connect;
+    }
     public static void createCustomerList(){
         customerList = new CustomerList();
         locationList = new LocationList();
@@ -70,13 +80,13 @@ public class CustomerDatabaseModel {
                 ));
             }
             rs = connect.createStatement().executeQuery(
-                    "SELECT appointmentId, customerId, title, description, location,  contact, 'type', url, 'start', 'end' FROM appointment;"
+                    "SELECT * FROM appointment;"
             );
             while (rs.next()){
                 customerList.lookupCustomer(Integer.parseInt(rs.getString("customerId"))-1).addAppointment(
                     (new Appointment(
                             Integer.parseInt(rs.getString("appointmentId")),
-                            customerList.lookupCustomer(Integer.parseInt(rs.getString("customerId"))),
+                            customerList.lookupCustomer(Integer.parseInt(rs.getString("customerId"))-1),
                             rs.getString("title"),
                             rs.getString("description"),
                             rs.getString("location"),
@@ -86,14 +96,18 @@ public class CustomerDatabaseModel {
                             rs.getString("start"),
                             rs.getString("end")
                 )));
+                appointmentTotal++;
             }
             System.out.println("Connection Successful!");
             connected = true;
-            Customer sample = new Customer(customerList.getAllCustomers().size()+1,"Jose Cuervo",
-                    "123 Calle","Mexico City", "Mexico", 10000, "000-0000");
-            insertNewCustomer(sample);
+//            Customer sample = new Customer(customerList.getAllCustomers().size()+1,"Jose Cuervo",
+//                    "123 Calle","Mexico City", "Mexico", 10000, "000-0000");
+//            insertNewCustomer(sample);
             fileInputStream.close();
             rs.close();
+//            String test = "2019-01-01 00:08:00.0";
+//            String result = convertToUtcTime(test);
+//            System.out.println(result);
         } catch (SQLException | ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
@@ -102,7 +116,7 @@ public class CustomerDatabaseModel {
         int customerId = appointment.getAssociatedCustomer().getId();
         try{
             final String insertAppointment = "INSERT INTO appointment VALUES" +
-                    "(3," + customerId + ", 1, '" + appointment.getTitle() + "', '" + appointment.getDescription() + "', '" +
+                    "(" + appointmentTotal++ + ", " + customerId + ", 1, '" + appointment.getTitle() + "', '" + appointment.getDescription() + "', '" +
                     appointment.getLocation() + "', '" + appointment.getContact() + "', '" + appointment.getType() + "', '" +
                     appointment.getUrl() + "', now(), now(), now(), 'U07Stq', now(), 'U07Stq');";
             PreparedStatement ps = connect.prepareStatement(insertAppointment);
@@ -110,7 +124,17 @@ public class CustomerDatabaseModel {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        customerList.lookupCustomer(customerId).addAppointment(appointment);
+        customerList.lookupCustomer(customerId-1).addAppointment(appointment);
+    }
+    public static void deleteAppointment(Appointment appointment){
+        try {
+            final String deleteAppointment = "DELETE FROM appointment WHERE appointmentId = " + appointment.getId() + ";";
+            connect.createStatement().execute(deleteAppointment);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        appointment.getAssociatedCustomer().deleteAppointment(appointment);
+        appointmentTotal--;
     }
     public static void insertNewCustomer(Customer customer){
         customerList.addCustomer(customer);

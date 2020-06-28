@@ -1,8 +1,11 @@
 package controllers;
 
 import Model.Appointment;
+import Model.City;
 import Model.Customer;
 import Model.CustomerDatabaseModel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +29,7 @@ public class AppointmentMaker implements Initializable {
     @FXML private ChoiceBox apptLocationChoice;
     @FXML private TextField apptContactField;
     @FXML private TextField apptURLField;
-    @FXML private TextField apptTimeField;
+    @FXML private ChoiceBox appointmentTimeSlots;
     @FXML private DatePicker apptDateChoice;
     @FXML private TextField appointmentCustomerName;
     @FXML private TextField apptTypeField;
@@ -41,7 +44,22 @@ public class AppointmentMaker implements Initializable {
     }
 
     private void loadCities(){
-        apptLocationChoice.setItems(CustomerDatabaseModel.getLocationList().getCityList());
+        ObservableList<String> cityChoices = FXCollections.observableArrayList();
+        for (City city: CustomerDatabaseModel.getLocationList().getCityList()){
+            cityChoices.add(city.getCityName());
+        }
+        apptLocationChoice.setItems(cityChoices);
+        loadBusinessHours();
+    }
+    private void loadBusinessHours(){
+        ObservableList<String> timeSlots = FXCollections.observableArrayList();
+        for (int i = 9; i < 12; i++) {
+            timeSlots.add(i + " AM");
+        }
+        for (int i = 1; i < 5; i++) {
+            timeSlots.add(i + " PM");
+        }
+        appointmentTimeSlots.setItems(timeSlots);
     }
 
     public void loadCustomer(int customerId){
@@ -71,7 +89,7 @@ public class AppointmentMaker implements Initializable {
     private void saveAppointment(ActionEvent actionEvent) throws IOException {
         if (validateAppointment()){
             CustomerDatabaseModel.makeNewAppointment(new Appointment(
-                    customer.getCustomerAppointments().size()+1,
+                    CustomerDatabaseModel.getAppointmentTotal(),
                     customer,
                     apptTitleField.getText(),
                     appointmentDescriptionField.getText(),
@@ -79,8 +97,8 @@ public class AppointmentMaker implements Initializable {
                     apptContactField.getText(),
                     apptTypeField.getText(),
                     apptURLField.getText(),
-                    apptTimeField.getText(),
-                    apptTimeField.getText()
+                    appointmentTimeSlots.getSelectionModel().getSelectedItem().toString(),
+                    appointmentTimeSlots.getSelectionModel().getSelectedItem().toString()
             ));
             exitWindow(actionEvent);
         } else {
@@ -120,8 +138,8 @@ public class AppointmentMaker implements Initializable {
             apptContactField.getText();
             apptTypeField.getText();
             apptURLField.getText();
-            apptTimeField.getText();
-            apptTimeField.getText();
+            appointmentTimeSlots.getSelectionModel().getSelectedItem().toString();
+            appointmentTimeSlots.getSelectionModel().getSelectedItem().toString();
         } catch (NullPointerException e){
             e.printStackTrace();
         }

@@ -80,7 +80,7 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="apptTitleField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <TextField fx:id="apptTitleField" prefWidth="88.0" text="not needed" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <padding>
                         <Insets bottom="10.0" />
                     </padding>
@@ -122,7 +122,7 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-                <TextField fx:id="apptContactField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                <TextField fx:id="apptContactField" prefWidth="88.0" text="not needed" GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <padding>
                         <Insets bottom="10.0" />
                     </padding>
@@ -143,18 +143,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="apptURLField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
-               <padding>
-                  <Insets bottom="10.0" />
-               </padding>
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="50.0" right="50.0" />
-               </GridPane.margin>
-            </TextField>
-            <TextField fx:id="apptTimeField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+            <TextField fx:id="apptURLField" prefWidth="88.0" promptText="not needed" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <padding>
                   <Insets bottom="10.0" />
                </padding>
@@ -180,7 +169,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="appointmentDescriptionField" prefWidth="88.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TextField fx:id="appointmentDescriptionField" prefWidth="88.0" text="not needed" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <padding>
                   <Insets bottom="10.0" />
                </padding>
@@ -191,6 +180,11 @@
                   <Insets left="50.0" right="50.0" />
                </GridPane.margin>
             </TextField>
+            <ChoiceBox fx:id="appointmentTimeSlots" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin>
+            </ChoiceBox>
             </children>
         </GridPane>
     </children>

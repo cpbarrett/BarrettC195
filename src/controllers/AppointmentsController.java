@@ -50,8 +50,8 @@ public class AppointmentsController implements Initializable {
         apptContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
         apptType.setCellValueFactory(new PropertyValueFactory<>("type"));
         apptURL.setCellValueFactory(new PropertyValueFactory<>("url"));
-        apptStartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-        apptEndTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        apptStartTime.setCellValueFactory(new PropertyValueFactory<>("localStartTime"));
+        apptEndTime.setCellValueFactory(new PropertyValueFactory<>("localEndTime"));
 
     }
     public void loadCustomer(Customer customer){
@@ -78,8 +78,8 @@ public class AppointmentsController implements Initializable {
 
     @FXML
     private void deleteAppointmentAction(ActionEvent actionEvent){
-        if (AlertUser.confirmDelete("Confirm Delete?", "Are you sure you want to delete this customer?")){
-//            CustomerDatabaseModel.deleteCustomerDB(appointments.getSelectionModel().getSelectedItem());
+        if (AlertUser.confirmDelete("Confirm Delete?", "Are you sure you want to delete this appointment?")){
+            CustomerDatabaseModel.deleteAppointment(appointments.getSelectionModel().getSelectedItem());
         }
     }
     @FXML
