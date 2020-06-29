@@ -6,11 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Properties;
 
 public class CustomerDatabaseModel {
@@ -115,16 +110,50 @@ public class CustomerDatabaseModel {
     public static void makeNewAppointment(Appointment appointment){
         int customerId = appointment.getAssociatedCustomer().getId();
         try{
-            final String insertAppointment = "INSERT INTO appointment VALUES" +
-                    "(" + appointmentTotal++ + ", " + customerId + ", 1, '" + appointment.getTitle() + "', '" + appointment.getDescription() + "', '" +
-                    appointment.getLocation() + "', '" + appointment.getContact() + "', '" + appointment.getType() + "', '" +
-                    appointment.getUrl() + "', now(), now(), now(), 'U07Stq', now(), 'U07Stq');";
+            final String insertAppointment = "INSERT INTO appointment VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = connect.prepareStatement(insertAppointment);
+            ps.setInt(1, appointmentTotal++);
+            ps.setInt(2, customerId);
+            ps.setInt(3, 1);
+            ps.setString(4, appointment.getTitle());
+            ps.setString(5, appointment.getDescription());
+            ps.setString(6, appointment.getLocation());
+            ps.setString(7, appointment.getContact());
+            ps.setString(8, appointment.getType());
+            ps.setString(9, appointment.getUrl());
+            ps.setString(10, appointment.getStartTime());
+            ps.setString(11, appointment.getEndTime());
+            ps.setTimestamp(12, Timestamp.from(Instant.now()));
+            ps.setString(13, "U07Stq");
+            ps.setTimestamp(14, Timestamp.from(Instant.now()));
+            ps.setString(15, "U07Stq");
             ps.execute();
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         customerList.lookupCustomer(customerId-1).addAppointment(appointment);
+    }
+    public static void updateAppointment(Appointment appointment) {
+        try {
+            final String updateAppointment = "UPDATE appointment SET title = ?, description = ?, location = ?, contact = ?, \"type\" = ?, url = ?, \"start\" = ?, \"end\" = ?, lastUpdate = ?, lastUpdateBy = ? WHERE appointmentId = ?";
+            PreparedStatement ps = connect.prepareStatement(updateAppointment);
+            ps.setString(1,appointment.getTitle());
+            ps.setString(2, appointment.getDescription());
+            ps.setString(3, appointment.getLocation());
+            ps.setString(4, appointment.getContact());
+            ps.setString(5, appointment.getType());
+            ps.setString(6, appointment.getUrl());
+            ps.setString(7, appointment.getStartTime());
+            ps.setString(8, appointment.getEndTime());
+            ps.setString(9, "U07Stq");
+            ps.setTimestamp(10, Timestamp.from(Instant.now()));
+            ps.setString(11, "U07Stq");
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     public static void deleteAppointment(Appointment appointment){
         try {

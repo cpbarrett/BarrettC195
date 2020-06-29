@@ -90,6 +90,12 @@ public class CustomerDatabaseController implements Initializable {
             openNewWindow(actionEvent, appointmentsUI);
         }
     }
+    @FXML
+    private void viewCalendar(ActionEvent actionEvent) throws IOException {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/AppointmentCalendar.fxml"));
+            Parent calendarUI = loader.load();
+            openNewWindow(actionEvent, calendarUI);
+    }
     private void openNewWindow(ActionEvent event, Parent newUI) throws IOException {
         Scene scene = new Scene(newUI);
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();

@@ -3,7 +3,6 @@ package controllers;
 import Model.Appointment;
 import Model.Customer;
 import Model.CustomerDatabaseModel;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import main.AlertUser;
@@ -21,7 +19,6 @@ import main.AlertUser;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 
 public class AppointmentsController implements Initializable {
     @FXML private TableView<Appointment> appointments;
@@ -50,8 +47,8 @@ public class AppointmentsController implements Initializable {
         apptContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
         apptType.setCellValueFactory(new PropertyValueFactory<>("type"));
         apptURL.setCellValueFactory(new PropertyValueFactory<>("url"));
-        apptStartTime.setCellValueFactory(new PropertyValueFactory<>("localStartTime"));
-        apptEndTime.setCellValueFactory(new PropertyValueFactory<>("localEndTime"));
+        apptStartTime.setCellValueFactory(new PropertyValueFactory<>("localDateStartTime"));
+        apptEndTime.setCellValueFactory(new PropertyValueFactory<>("localDateEndTime"));
 
     }
     public void loadCustomer(Customer customer){

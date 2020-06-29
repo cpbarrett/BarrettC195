@@ -19,17 +19,19 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.AlertUser;
+
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class AppointmentMaker implements Initializable {
     @FXML private TextField apptIdField;
     @FXML private TextField appointmentDescriptionField;
-    @FXML private ChoiceBox apptLocationChoice;
+    @FXML private ChoiceBox<String> apptLocationChoice;
     @FXML private TextField apptContactField;
     @FXML private TextField apptURLField;
-    @FXML private ChoiceBox appointmentTimeSlots;
+    @FXML private ChoiceBox<String> appointmentTimeSlots;
     @FXML private DatePicker apptDateChoice;
     @FXML private TextField appointmentCustomerName;
     @FXML private TextField apptTypeField;
@@ -77,12 +79,16 @@ public class AppointmentMaker implements Initializable {
                 e.printStackTrace();
             }
         });
-//        customerIdField.setText(appointment.getId()+"");
-//        customerNameField.setText(appointment.getCustomerName());
-//        customerAddressField.setText(appointment.getAddress());
-//        customerCityChoice.setValue(appointment.getCity());
-//        customerPostalCodeField.setText(appointment.getPostalCode()+"");
-//        phoneNumberField.setText(appointment.getPhoneNumber());
+        apptIdField.setText(appointment.getId()+"");
+        appointmentCustomerName.setText(appointment.getAssociatedCustomer().getCustomerName());
+        appointmentDescriptionField.setText(appointment.getDescription());
+        apptLocationChoice.setValue(appointment.getLocation());
+        apptContactField.setText(appointment.getContact());
+        apptURLField.setText(appointment.getUrl());
+        apptTitleField.setText(appointment.getTitle());
+        apptTypeField.setText(appointment.getType());
+        apptDateChoice.setValue(LocalDate.now());
+        appointmentTimeSlots.setValue("Select New Time");
     }
 
     @FXML
@@ -93,27 +99,28 @@ public class AppointmentMaker implements Initializable {
                     customer,
                     apptTitleField.getText(),
                     appointmentDescriptionField.getText(),
-                    apptLocationChoice.getSelectionModel().getSelectedItem().toString(),
+                    apptLocationChoice.getSelectionModel().getSelectedItem(),
                     apptContactField.getText(),
                     apptTypeField.getText(),
                     apptURLField.getText(),
-                    appointmentTimeSlots.getSelectionModel().getSelectedItem().toString(),
-                    appointmentTimeSlots.getSelectionModel().getSelectedItem().toString()
+                    Appointment.convertToUtcDateTime(makeTimeStamp()),
+                    Appointment.convertToUtcDateTime(appointmentDuration())
             ));
-            exitWindow(actionEvent);
-        } else {
-            exitWindow(actionEvent);
         }
+        exitWindow(actionEvent);
     }
     @FXML
     private void updateAppointment(ActionEvent actionEvent) throws IOException {
-        if (validateAppointment()){
-            if (AlertUser.confirmDelete("Confirm Update?", "Are you sure you want to update your appointment?")){
-                exitWindow(actionEvent);
+        if (validateAppointment()) {
+            if (AlertUser.confirmDelete("Confirm Update?", "Are you sure you want to update your appointment?")) {
+                appointment.setTitle(apptTitleField.getText());
+                appointment.setDescription(appointmentDescriptionField.getText());
+                appointment.setLocation(apptLocationChoice.getSelectionModel().getSelectedItem());
+                appointment.setContact(apptContactField.getText());
             }
-        } else {
-            exitWindow(actionEvent);
         }
+            exitWindow(actionEvent);
+
     }
     @FXML
     private void cancelAppointment(ActionEvent actionEvent) throws IOException {
@@ -134,15 +141,72 @@ public class AppointmentMaker implements Initializable {
         try {
             apptTitleField.getText();
             appointmentDescriptionField.getText();
-            apptLocationChoice.getSelectionModel().getSelectedItem().toString();
+            apptLocationChoice.getSelectionModel().getSelectedItem();
             apptContactField.getText();
             apptTypeField.getText();
             apptURLField.getText();
-            appointmentTimeSlots.getSelectionModel().getSelectedItem().toString();
-            appointmentTimeSlots.getSelectionModel().getSelectedItem().toString();
+            appointmentTimeSlots.getSelectionModel().getSelectedItem();
+            appointmentTimeSlots.getSelectionModel().getSelectedItem();
         } catch (NullPointerException e){
             e.printStackTrace();
         }
         return true;
+    }
+    private String makeTimeStamp(){
+        LocalDate appointmentDate = apptDateChoice.getValue();
+        String appointmentTime = appointmentTimeSlots.getSelectionModel().getSelectedItem();
+        switch (appointmentTime) {
+            case "10 AM":
+                appointmentTime = " 10:00:00.0";
+                break;
+            case "11 AM":
+                appointmentTime = " 11:00:00.0";
+                break;
+            case "1 PM":
+                appointmentTime = " 13:00:00.0";
+                break;
+            case "2 PM":
+                appointmentTime = " 14:00:00.0";
+                break;
+            case "3 PM":
+                appointmentTime = " 15:00:00.0";
+                break;
+            case "4 PM":
+                appointmentTime = " 16:00:00.0";
+                break;
+            default:
+                appointmentTime = " 09:00:00.0";
+                break;
+        }
+        String time2 = appointmentDate + appointmentTime;
+        return time2;
+    }
+    private String appointmentDuration() { //1 hour
+        LocalDate appointmentDate = apptDateChoice.getValue();
+        String appointmentTime = appointmentTimeSlots.getSelectionModel().getSelectedItem();
+        switch (appointmentTime) {
+            case "10 AM":
+                appointmentTime = " 11:00:00.0";
+                break;
+            case "11 AM":
+                appointmentTime = " 12:00:00.0";
+                break;
+            case "1 PM":
+                appointmentTime = " 14:00:00.0";
+                break;
+            case "2 PM":
+                appointmentTime = " 15:00:00.0";
+                break;
+            case "3 PM":
+                appointmentTime = " 16:00:00.0";
+                break;
+            case "4 PM":
+                appointmentTime = " 17:00:00.0";
+                break;
+            default:
+                appointmentTime = " 10:00:00.0";
+                break;
+        }
+        return appointmentDate + appointmentTime;
     }
 }
