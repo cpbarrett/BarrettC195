@@ -29,8 +29,6 @@
             <Button mnemonicParsing="false" onAction="#deleteCustomerAction" text="Delete" />
             <Button layoutX="384.0" layoutY="18.0" mnemonicParsing="false" onAction="#viewAppointments" text="Appointments" />
             <Button layoutX="336.0" layoutY="18.0" mnemonicParsing="false" onAction="#viewCalendar" text="Calendar" />
-            <Button mnemonicParsing="false" onAction="#searchCustomerAction" text="Search" />
-            <TextField fx:id="searchField" />
         </buttons>
          <padding>
             <Insets right="15.0" />

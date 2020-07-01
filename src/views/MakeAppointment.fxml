@@ -28,7 +28,7 @@
                 <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
                     <buttons>
                         <Button fx:id="saveButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveAppointment" text="Save" />
-                        <Button fx:id="cancelButton" layoutX="235.0" layoutY="48.0" mnemonicParsing="false" onAction="#cancelAppointment" text="Cancel" />
+                        <Button layoutX="235.0" layoutY="48.0" mnemonicParsing="false" onAction="#cancelAppointment" text="Cancel" />
                     </buttons>
                     <GridPane.margin>
                         <Insets right="50.0" />

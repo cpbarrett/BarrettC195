@@ -92,7 +92,7 @@ public class AppointmentsController implements Initializable {
     private void returnToCustomerDatabaseView(ActionEvent actionEvent) throws IOException {
             exitWindow(actionEvent);
     }
-    private void openNewWindow(javafx.event.ActionEvent event, Parent newUI) throws IOException {
+    private void openNewWindow(ActionEvent event, Parent newUI) {
         Scene scene = new Scene(newUI);
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
         window.setScene(scene);
@@ -108,7 +108,8 @@ public class AppointmentsController implements Initializable {
         window.show();
     }
     @FXML
-    private void generateReport(ActionEvent actionEvent) throws FileNotFoundException {
+    private void generateReport(ActionEvent actionEvent) {
+        try {
             if (!reportType.getSelectionModel().getSelectedItem().isEmpty()) {
                 String selectedReportType = reportType.getSelectionModel().getSelectedItem();
                 switch (selectedReportType) {
@@ -125,7 +126,8 @@ public class AppointmentsController implements Initializable {
                         break;
                 }
             }
-        }
+        } catch (FileNotFoundException | NullPointerException ignored) {}
+    }
     private void appointmentMonths() throws FileNotFoundException {
         Map<String, Integer> report = new HashMap<>();
         for (Appointment appointment: customer.getCustomerAppointments()){

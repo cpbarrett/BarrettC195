@@ -30,7 +30,6 @@ public class CustomerDatabaseController implements Initializable {
     @FXML private TableColumn<Customer, String> customerCountry;
     @FXML private TableColumn<Customer, String> customerPostalCode;
     @FXML private TableColumn<Customer, String> customerPhoneNumber;
-    @FXML private TextField searchField;
 
     @Override
     public void initialize(URL location, ResourceBundle rb) {
@@ -48,14 +47,6 @@ public class CustomerDatabaseController implements Initializable {
         customerPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         customers.setItems(CustomerDatabaseModel.getCustomerList().getAllCustomers());
-    }
-    @FXML
-    private void searchCustomerAction(){
-        try {
-            customers.setItems((ObservableList<Customer>) CustomerDatabaseModel.getCustomerList().lookupCustomer(Integer.parseInt(searchField.getText().trim())));
-        } catch (NumberFormatException e) {
-            customers.setItems(CustomerDatabaseModel.getCustomerList().lookupCustomer(searchField.getText().trim()));
-        }
     }
 
     @FXML
@@ -96,7 +87,7 @@ public class CustomerDatabaseController implements Initializable {
             Parent calendarUI = loader.load();
             openNewWindow(actionEvent, calendarUI);
     }
-    private void openNewWindow(ActionEvent event, Parent newUI) throws IOException {
+    private void openNewWindow(ActionEvent event, Parent newUI) {
         Scene scene = new Scene(newUI);
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
         window.setScene(scene);

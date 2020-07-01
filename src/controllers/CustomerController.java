@@ -127,8 +127,7 @@ public class CustomerController implements Initializable {
             String validPostalCode = customerPostalCodeField.getText();
             String validNumber = phoneNumberField.getText();
             if (validName.isEmpty() || validAddress.isEmpty() || validCity.isEmpty() || validNumber.isEmpty()) {
-                NullPointerException nullPointerException = new NullPointerException();
-                throw nullPointerException;
+                throw new NullPointerException();
             }
             if (validAddress.length() > 50) {
                 AlertUser.showError("Address is too long.");
