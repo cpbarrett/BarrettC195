@@ -20,9 +20,7 @@ import javafx.stage.Stage;
 import main.AlertUser;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.URL;
-import java.time.Month;
 import java.util.*;
 
 public class AppointmentsController implements Initializable {
@@ -141,8 +139,8 @@ public class AppointmentsController implements Initializable {
             }
         }
         PrintWriter generatedReport = new PrintWriter(new FileOutputStream(new File("report.txt")));
-        for (String string : report.keySet()){
-            generatedReport.write(string + " Count: " + report.get(string));
+        for (Map.Entry<String, Integer> map : report.entrySet()){
+            generatedReport.write(map.getKey() + " Count: " + map.getValue());
             generatedReport.println();
         }
         generatedReport.close();
