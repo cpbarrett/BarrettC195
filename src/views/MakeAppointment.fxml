@@ -134,7 +134,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="apptURLField" prefWidth="88.0" promptText="not needed" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <TextField fx:id="apptURLField" prefWidth="88.0" text="not needed" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <padding>
                   <Insets bottom="10.0" />
                </padding>

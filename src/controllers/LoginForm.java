@@ -12,22 +12,45 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.AlertUser;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoginForm implements Initializable {
     @FXML private TextField username;
     @FXML private PasswordField password;
     ResourceBundle resourceBundle;
+    private PrintWriter printWriter;
     @Override
     public void initialize(URL location, ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
-
+        try {
+            this.printWriter = new PrintWriter(new FileOutputStream(new File("login.txt"), true));
+        } catch (FileNotFoundException e) {
+            Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
-
+    public ResourceBundle loadLanguageResources() {
+        switch (Locale.getDefault().getCountry().trim()) {
+            case "MX":
+                this.resourceBundle = ResourceBundle.getBundle("ResourceBundle/MX", Locale.getDefault());
+                break;
+            case "CAN":
+                this.resourceBundle = ResourceBundle.getBundle("ResourceBundle/CAN", Locale.getDefault());
+                break;
+            default :
+                this.resourceBundle = ResourceBundle.getBundle("ResourceBundle/US", Locale.getDefault());
+                break;
+        }
+        return resourceBundle;
+    }
     private boolean checkLogin(String user, String passW) {
         if (user.matches("test") && passW.matches("test")){
+            printWriter.append("User: " + user + "Time: " + LocalDateTime.now());
+            printWriter.close();
             return true;
         } else {
             AlertUser.display(resourceBundle.getString("alert"), resourceBundle.getString("alertMessage"));
@@ -37,7 +60,9 @@ public class LoginForm implements Initializable {
 
     @FXML
     private void openNewWindow(ActionEvent event) throws IOException {
-            if (checkLogin(username.getText().trim(), password.getText().trim())) {
+        String user = username.getText().trim();
+        String pass = password.getText().trim();
+            if (checkLogin(user, pass)) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/CustomerDatabaseView.fxml"));
                 Parent customerUI = loader.load();
                 Scene scene = new Scene(customerUI);

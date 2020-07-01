@@ -3,6 +3,8 @@ package controllers;
 import Model.Appointment;
 import Model.Customer;
 import Model.CustomerDatabaseModel;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,15 +12,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import main.AlertUser;
 
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.time.Month;
+import java.util.*;
 
 public class AppointmentsController implements Initializable {
     @FXML private TableView<Appointment> appointments;
@@ -32,6 +37,7 @@ public class AppointmentsController implements Initializable {
     @FXML private TableColumn<Appointment, String> apptURL;
     @FXML private TableColumn<Appointment, String> apptStartTime;
     @FXML private TableColumn<Appointment, String> apptEndTime;
+    @FXML private ChoiceBox<String> reportType;
     private Customer customer;
 
     @Override
@@ -49,7 +55,12 @@ public class AppointmentsController implements Initializable {
         apptURL.setCellValueFactory(new PropertyValueFactory<>("url"));
         apptStartTime.setCellValueFactory(new PropertyValueFactory<>("localDateStartTime"));
         apptEndTime.setCellValueFactory(new PropertyValueFactory<>("localDateEndTime"));
-
+        createReportTypes();
+    }
+    private void createReportTypes(){
+        ObservableList<String> reports = FXCollections.observableArrayList();
+        reports.addAll("Appointment Types By Month", "Consultant Schedule", "Extra");
+        reportType.setItems(reports);
     }
     public void loadCustomer(Customer customer){
         this.customer = customer;
@@ -97,5 +108,79 @@ public class AppointmentsController implements Initializable {
         window.setTitle("Customers");
         window.setScene(scene);
         window.show();
+    }
+    @FXML
+    private void generateReport(ActionEvent actionEvent) throws FileNotFoundException {
+            if (!reportType.getSelectionModel().getSelectedItem().isEmpty()) {
+                String selectedReportType = reportType.getSelectionModel().getSelectedItem();
+                switch (selectedReportType) {
+                    case "Appointment Types By Month":
+                        appointmentMonths();
+                        break;
+                    case "Consultant Schedule":
+                        consultantSchedule();
+                        break;
+                    case "Extra":
+                        extraReport();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    private void appointmentMonths() throws FileNotFoundException {
+        Map<String, Integer> report = new HashMap<>();
+        for (Appointment appointment: customer.getCustomerAppointments()){
+            String key = appointment.getAppointmentMonth() + "-" + appointment.getType();
+            report.put(key, 0);
+        }
+        for (Appointment appointment : customer.getCustomerAppointments()){
+            String key = appointment.getAppointmentMonth() + "-" + appointment.getType();
+            if (report.containsKey(key)){
+                report.put(key, report.get(key)+1);
+            }
+        }
+        PrintWriter generatedReport = new PrintWriter(new FileOutputStream(new File("report.txt")));
+        for (String string : report.keySet()){
+            generatedReport.write(string + " Count: " + report.get(string));
+            generatedReport.println();
+        }
+        generatedReport.close();
+    }
+    private void consultantSchedule() throws FileNotFoundException {
+        List<String> report = new ArrayList<>();
+        report.add("Schedule for " + customer.getCustomerName() + ": ");
+        for (Appointment appointment: customer.getCustomerAppointments()){
+            report.add(
+                    "Location: " + appointment.getLocation() + ", " +
+                    appointment.getAppointmentTime() + " " +
+                    appointment.getAppointmentMonth() +  " " +
+                    appointment.getAppointmentDayOfMonth());
+        }
+        PrintWriter generatedReport = new PrintWriter(new FileOutputStream(new File("report.txt")));
+
+        for (String line : report){
+            generatedReport.write(line);
+            generatedReport.println();
+        }
+        generatedReport.close();
+    }
+    private void extraReport() throws FileNotFoundException {
+        List<String> report = new ArrayList<>();
+        report.add("List All Appointments for " + customer.getCustomerName() + ": ");
+        for (Appointment appointment: customer.getCustomerAppointments()){
+            report.add(
+                    "Description: " + appointment.getDescription() + ", " +
+                    appointment.getAppointmentTime() + " " +
+                    appointment.getAppointmentMonth() +  " " +
+                    appointment.getAppointmentDayOfMonth());
+        }
+        PrintWriter generatedReport = new PrintWriter(new FileOutputStream(new File("report.txt")));
+
+        for (String line : report){
+            generatedReport.write(line);
+            generatedReport.println();
+        }
+        generatedReport.close();
     }
 }

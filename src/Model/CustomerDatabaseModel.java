@@ -1,6 +1,7 @@
 package Model;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import main.Main;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -100,9 +101,7 @@ public class CustomerDatabaseModel {
 //            insertNewCustomer(sample);
             fileInputStream.close();
             rs.close();
-//            String test = "2019-01-01 00:08:00.0";
-//            String result = convertToUtcTime(test);
-//            System.out.println(result);
+            Main.setAlarm();
         } catch (SQLException | ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,7 @@
 package main;
 
 import Model.CustomerDatabaseModel;
+import controllers.LoginForm;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,32 +15,28 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Main extends Application {
+    public static void setAlarm() {
+        Runnable alarm = new Alarm();
+        new Thread(alarm).start();
+    }
+
     @Override
     public void start(Stage window) {
         CustomerDatabaseModel.createCustomerList();
-//        Locale.setDefault(new Locale("fr", "CAN"));
         Parent loginUI = null;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/LoginForm.fxml"));
             loginUI = loader.load();
-            switch (Locale.getDefault().getCountry().trim()) {
-                case "MX":
-                    loader.setResources(ResourceBundle.getBundle("ResourceBundle/MX", Locale.getDefault()));
-                    break;
-                case "CAN":
-                    loader.setResources(ResourceBundle.getBundle("ResourceBundle/CAN", Locale.getDefault()));
-                    break;
-                default :
-                    loader.setResources(ResourceBundle.getBundle("ResourceBundle/US", Locale.getDefault()));
-                    break;
-            }
-            window.setTitle(loader.getResources().getString("title"));
+            LoginForm loginForm = loader.getController();
+            window.setTitle(loginForm.loadLanguageResources().getString("title"));
             window.setScene(new Scene(loginUI, 600, 400));
             //Add listener to close out the database when the app exits
             window.setOnCloseRequest(event -> {
                 try {
-                    CustomerDatabaseModel.getConnection().close();
-                    System.out.println("Connection to database terminated.");
+                    if (CustomerDatabaseModel.getConnection() != null) {
+                        CustomerDatabaseModel.getConnection().close();
+                        System.out.println("Connection to database terminated.");
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

@@ -106,8 +106,8 @@ public class AppointmentMaker implements Initializable {
                     Appointment.convertToUtcDateTime(makeTimeStamp()),
                     Appointment.convertToUtcDateTime(appointmentDuration())
             ));
+            exitWindow(actionEvent);
         }
-        exitWindow(actionEvent);
     }
     @FXML
     private void updateAppointment(ActionEvent actionEvent) throws IOException {
@@ -117,10 +117,13 @@ public class AppointmentMaker implements Initializable {
                 appointment.setDescription(appointmentDescriptionField.getText());
                 appointment.setLocation(apptLocationChoice.getSelectionModel().getSelectedItem());
                 appointment.setContact(apptContactField.getText());
+                appointment.setType(apptTypeField.getText());
+                appointment.setUrl(apptURLField.getText());
+                appointment.setStartTime(Appointment.convertToUtcDateTime(makeTimeStamp()));
+                appointment.setEndTime(Appointment.convertToUtcDateTime(appointmentDuration()));
+                exitWindow(actionEvent);
             }
         }
-            exitWindow(actionEvent);
-
     }
     @FXML
     private void cancelAppointment(ActionEvent actionEvent) throws IOException {
@@ -145,10 +148,22 @@ public class AppointmentMaker implements Initializable {
             apptContactField.getText();
             apptTypeField.getText();
             apptURLField.getText();
-            appointmentTimeSlots.getSelectionModel().getSelectedItem();
-            appointmentTimeSlots.getSelectionModel().getSelectedItem();
+            String time = Appointment.convertToUtcDateTime(makeTimeStamp());
+            Appointment.convertToUtcDateTime(appointmentDuration());
+
+            for (Customer customer: CustomerDatabaseModel.getCustomerList().getAllCustomers()){
+                for (Appointment appointment: customer.getCustomerAppointments()) {
+                    if (time.matches(appointment.getStartTime())){
+                        AlertUser.showError("Appointment time is already taken please pick another time.");
+                        return false;
+                    }
+                }
+            }
+
+
         } catch (NullPointerException e){
             e.printStackTrace();
+            AlertUser.showError("Ensure that no appointment fields are blank.");
         }
         return true;
     }
