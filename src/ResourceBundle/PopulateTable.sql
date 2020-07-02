@@ -44,6 +44,6 @@ INSERT INTO `user` VALUES
 -- populate table `appointment`
 --
 INSERT INTO `appointment` VALUES
-(1,1,1,'not needed','not needed','not needed','not needed','Presentation','not needed','2019-01-01 00:00:00','2019-01-01 01:00:00','2019-01-01 00:00:00','test','2019-01-01 00:00:00','test'),
-(2,2,1,'not needed','not needed','not needed','not needed','Scrum','not needed','2019-01-01 00:00:00','2019-01-01 01:00:00','2019-01-01 00:00:00','test','2019-01-01 00:00:00','test'),
-(3,2,1,'not needed','not needed','not needed','not needed','Scrum','not needed','2020-07-04 00:00:00','2020-07-04 00:00:00','2019-01-01 00:00:00','test','2019-01-01 00:00:00','test');
+(1,1,1,'not needed','not needed','New York','not needed','Presentation','not needed','2019-01-01 00:00:00','2019-01-01 01:00:00','2019-01-01 00:00:00','test','2019-01-01 00:00:00','test'),
+(2,2,1,'not needed','not needed','Los Angeles','not needed','Scrum','not needed','2019-01-01 00:00:00','2019-01-01 01:00:00','2019-01-01 00:00:00','test','2019-01-01 00:00:00','test'),
+(3,2,1,'not needed','not needed','New York','not needed','Scrum','not needed','2020-07-04 00:00:00','2020-07-04 00:00:00','2019-01-01 00:00:00','test','2019-01-01 00:00:00','test');

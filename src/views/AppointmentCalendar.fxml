@@ -2,22 +2,23 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AppointmentCalendarController">
-   <children>
-      <TableView fx:id="calendarAppointments" layoutX="188.0" layoutY="134.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <columns>
-          <TableColumn fx:id="customerNames" minWidth="-Infinity" prefWidth="120.0" text="Customer Name" />
-          <TableColumn fx:id="appointmentLocation" minWidth="-Infinity" prefWidth="120.0" text="Location" />
-            <TableColumn fx:id="appointmentWeek" minWidth="-Infinity" prefWidth="120.0" text="Week" />
-            <TableColumn fx:id="appointmentMonth" minWidth="-Infinity" prefWidth="120.0" text="Month" />
-            <TableColumn fx:id="appointmentDate" minWidth="-Infinity" prefWidth="120.0" text="Date" />
-            <TableColumn fx:id="appointmentTime" minWidth="-Infinity" prefWidth="120.0" text="Time" />
-        </columns>
-      </TableView>
-      <ButtonBar buttonMinWidth="80.0" AnchorPane.bottomAnchor="375.0" AnchorPane.leftAnchor="635.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <buttons>
-          <Button alignment="CENTER" mnemonicParsing="false" onAction="#exitWindow" text="Back" />
-        </buttons>
-      </ButtonBar>
-   </children>
+<AnchorPane prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AppointmentCalendarController">
+    <TableView fx:id="calendarAppointments" layoutX="188.0" layoutY="134.0" AnchorPane.bottomAnchor="0.0"
+               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <columns>
+          <TableColumn fx:id="customerNames" minWidth="-Infinity" prefWidth="120.0" text="Customer Name"/>
+          <TableColumn fx:id="appointmentLocation" minWidth="-Infinity" prefWidth="120.0" text="Location"/>
+          <TableColumn fx:id="appointmentWeek" minWidth="-Infinity" prefWidth="120.0" text="Week"/>
+          <TableColumn fx:id="appointmentMonth" minWidth="-Infinity" prefWidth="120.0" text="Month"/>
+          <TableColumn fx:id="appointmentDate" minWidth="-Infinity" prefWidth="120.0" text="Date"/>
+          <TableColumn fx:id="appointmentTime" minWidth="-Infinity" prefWidth="120.0" text="Time"/>
+      </columns>
+    </TableView>
+    <ButtonBar buttonMinWidth="80.0" AnchorPane.bottomAnchor="375.0" AnchorPane.leftAnchor="635.0"
+               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <buttons>
+          <Button alignment="CENTER" mnemonicParsing="false" onAction="#exitWindow" text="Back"/>
+      </buttons>
+    </ButtonBar>
 </AnchorPane>

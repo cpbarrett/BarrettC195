@@ -4,8 +4,8 @@ import java.sql.Timestamp;
 import java.time.*;
 
 public class Appointment {
-    private int id;
-    private Customer associatedCustomer;
+    private final int id;
+    private final Customer associatedCustomer;
     private String title;
     private String description;
     private String location;
@@ -52,18 +52,10 @@ public class Appointment {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public Customer getAssociatedCustomer() {
         return associatedCustomer;
     }
     public String getName(){ return this.associatedCustomer.getCustomerName();}
-
-    public void setAssociatedCustomer(Customer associatedCustomer) {
-        this.associatedCustomer = associatedCustomer;
-    }
 
     public String getTitle() {
         return title;
@@ -119,7 +111,8 @@ public class Appointment {
         ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.of("UTC"));
         ZonedDateTime localZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault());
         localDateTime = localZonedDateTime.toLocalDateTime();
-        return localDateTime.toString();
+        Timestamp finalTime = Timestamp.valueOf(localDateTime);
+        return finalTime.toString();
     }
     public static String convertToUtcDateTime(String time){
         Timestamp timestamp = Timestamp.valueOf(time);
@@ -144,7 +137,10 @@ public class Appointment {
     }
     public LocalTime getAppointmentTime(){
         Timestamp timestamp = Timestamp.valueOf(this.startTime);
-        ZonedDateTime zonedDateTime = timestamp.toInstant().atZone(ZoneId.of("UTC"));
-        return zonedDateTime.toLocalTime();
+        LocalDateTime localDateTime = timestamp.toLocalDateTime();
+        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.of("UTC"));
+        ZonedDateTime localZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault());
+        localDateTime = localZonedDateTime.toLocalDateTime();
+        return localDateTime.toLocalTime();
     }
 }

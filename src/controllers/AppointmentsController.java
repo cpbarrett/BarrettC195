@@ -25,16 +25,16 @@ import java.util.*;
 
 public class AppointmentsController implements Initializable {
     @FXML private TableView<Appointment> appointments;
-    @FXML private TableColumn<Appointment, Integer> apptId;
-    @FXML private TableColumn<Appointment, String> apptName;
-    @FXML private TableColumn<Appointment, String> apptTitle;
-    @FXML private TableColumn<Appointment, String> apptDescription;
-    @FXML private TableColumn<Appointment, String> apptLocation;
-    @FXML private TableColumn<Appointment, String> apptContact;
-    @FXML private TableColumn<Appointment, String> apptType;
-    @FXML private TableColumn<Appointment, String> apptURL;
-    @FXML private TableColumn<Appointment, String> apptStartTime;
-    @FXML private TableColumn<Appointment, String> apptEndTime;
+    @FXML private TableColumn<Appointment, Integer> appointmentId;
+    @FXML private TableColumn<Appointment, String> appointmentName;
+    @FXML private TableColumn<Appointment, String> appointmentTitle;
+    @FXML private TableColumn<Appointment, String> appointmentDescription;
+    @FXML private TableColumn<Appointment, String> appointmentLocation;
+    @FXML private TableColumn<Appointment, String> appointmentContact;
+    @FXML private TableColumn<Appointment, String> appointmentType;
+    @FXML private TableColumn<Appointment, String> appointmentURL;
+    @FXML private TableColumn<Appointment, String> appointmentStartTime;
+    @FXML private TableColumn<Appointment, String> appointmentEndTime;
     @FXML private ChoiceBox<String> reportType;
     private Customer customer;
 
@@ -43,16 +43,16 @@ public class AppointmentsController implements Initializable {
         createTable();
     }
     private void createTable(){
-        apptId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        apptName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        apptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
-        apptDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
-        apptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-        apptContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
-        apptType.setCellValueFactory(new PropertyValueFactory<>("type"));
-        apptURL.setCellValueFactory(new PropertyValueFactory<>("url"));
-        apptStartTime.setCellValueFactory(new PropertyValueFactory<>("localDateStartTime"));
-        apptEndTime.setCellValueFactory(new PropertyValueFactory<>("localDateEndTime"));
+        appointmentId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        appointmentName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        appointmentTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        appointmentDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        appointmentLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        appointmentContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        appointmentType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        appointmentURL.setCellValueFactory(new PropertyValueFactory<>("url"));
+        appointmentStartTime.setCellValueFactory(new PropertyValueFactory<>("localDateStartTime"));
+        appointmentEndTime.setCellValueFactory(new PropertyValueFactory<>("localDateEndTime"));
         createReportTypes();
     }
     private void createReportTypes(){

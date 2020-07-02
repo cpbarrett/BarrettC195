@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class LocationList {
-    private ObservableList<City> cityList;
+    private final ObservableList<City> cityList;
 
     public LocationList() {
         this.cityList = FXCollections.observableArrayList();

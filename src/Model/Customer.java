@@ -4,14 +4,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Customer {
-    private int id;
-    private String customerName;
-    private String address;
-    private String city;
-    private String country;
-    private int postalCode;
-    private String phoneNumber;
-    private ObservableList<Appointment> customerAppointments;
+    private final int id;
+    private final String customerName;
+    private final String address;
+    private final String city;
+    private final String country;
+    private final int postalCode;
+    private final String phoneNumber;
+    private final ObservableList<Appointment> customerAppointments;
 
     public Customer(int id, String customerName, String address, String city, String country, int postalCode, String phoneNumber){
         this.id = id;
@@ -32,57 +32,30 @@ public class Customer {
         return customerName;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
     public String getAddress() {
         return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public int getPostalCode() {
         return postalCode;
     }
-
-    public void setPostalCode(int postalCode) {
-        this.postalCode = postalCode;
-    }
+    public String getCountry() { return country; }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public ObservableList<Appointment> getCustomerAppointments() {
         return customerAppointments;
     }
-    public boolean addAppointment(Appointment appointment){
-        return this.customerAppointments.add(appointment);
+    public void addAppointment(Appointment appointment){
+        this.customerAppointments.add(appointment);
     }
-    public boolean deleteAppointment(Appointment appointment){
-        return this.customerAppointments.remove(appointment);
+    public void deleteAppointment(Appointment appointment){
+        this.customerAppointments.remove(appointment);
     }
 }

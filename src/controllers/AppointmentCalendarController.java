@@ -48,9 +48,7 @@ public class AppointmentCalendarController implements Initializable {
     }
     private void populateCalendar(){
         for (Customer customer: CustomerDatabaseModel.getCustomerList().getAllCustomers()){
-            for (Appointment appointment: customer.getCustomerAppointments()) {
-                calendar.add(appointment);
-            }
+            calendar.addAll(customer.getCustomerAppointments());
         }
     }
     @FXML

@@ -74,7 +74,7 @@ public class LoginForm implements Initializable {
     }
 
     @FXML
-    private void exitWindow(ActionEvent actionEvent) throws IOException {
+    private void exitWindow(ActionEvent actionEvent) {
         Stage window = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
         window.close();
         System.exit(0);

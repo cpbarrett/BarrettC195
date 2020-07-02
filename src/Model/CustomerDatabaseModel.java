@@ -1,6 +1,7 @@
 package Model;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import main.AlertUser;
 import main.Main;
 
 import java.io.FileInputStream;
@@ -96,9 +97,6 @@ public class CustomerDatabaseModel {
             }
             System.out.println("Connection Successful!");
             connected = true;
-//            Customer sample = new Customer(customerList.getAllCustomers().size()+1,"Jose Cuervo",
-//                    "123 Calle","Mexico City", "Mexico", 10000, "000-0000");
-//            insertNewCustomer(sample);
             fileInputStream.close();
             rs.close();
             Main.setAlarm();
@@ -135,24 +133,25 @@ public class CustomerDatabaseModel {
     }
     public static void updateAppointment(Appointment appointment) {
         try {
-            final String updateAppointment = "UPDATE appointment SET title = ?, description = ?, location = ?, contact = ?, \"type\" = ?, url = ?, \"start\" = ?, \"end\" = ?, lastUpdate = ?, lastUpdateBy = ? WHERE appointmentId = ?";
-            PreparedStatement ps = connect.prepareStatement(updateAppointment);
+            final String update = "UPDATE appointment SET title = ?, description = ?, location = ?, contact = ?, type = ?, url = ?, start = ?, end = ?, lastUpdate = ?, lastUpdateBy = ? WHERE appointmentId = ?";
+            PreparedStatement ps = connect.prepareStatement(update);
             ps.setString(1,appointment.getTitle());
             ps.setString(2, appointment.getDescription());
             ps.setString(3, appointment.getLocation());
             ps.setString(4, appointment.getContact());
             ps.setString(5, appointment.getType());
             ps.setString(6, appointment.getUrl());
-            ps.setString(7, appointment.getStartTime());
-            ps.setString(8, appointment.getEndTime());
-            ps.setString(9, "U07Stq");
-            ps.setTimestamp(10, Timestamp.from(Instant.now()));
-            ps.setString(11, "U07Stq");
+            ps.setTimestamp(7, Timestamp.valueOf(appointment.getStartTime()));
+            ps.setTimestamp(8, Timestamp.valueOf(appointment.getEndTime()));
+            ps.setTimestamp(9, Timestamp.from(Instant.now()));
+            ps.setString(10, "U07Stq");
+            ps.setInt(11, appointment.getId());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
     public static void deleteAppointment(Appointment appointment){
         try {

@@ -26,16 +26,16 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class AppointmentMaker implements Initializable {
-    @FXML private TextField apptIdField;
+    @FXML private TextField appointmentIdField;
     @FXML private TextField appointmentDescriptionField;
-    @FXML private ChoiceBox<String> apptLocationChoice;
-    @FXML private TextField apptContactField;
-    @FXML private TextField apptURLField;
+    @FXML private ChoiceBox<String> appointmentLocationChoice;
+    @FXML private TextField appointmentContactField;
+    @FXML private TextField appointmentURLField;
     @FXML private ChoiceBox<String> appointmentTimeSlots;
-    @FXML private DatePicker apptDateChoice;
+    @FXML private DatePicker appointmentDateChoice;
     @FXML private TextField appointmentCustomerName;
-    @FXML private TextField apptTypeField;
-    @FXML private TextField apptTitleField;
+    @FXML private TextField appointmentTypeField;
+    @FXML private TextField appointmentTitleField;
     @FXML private Button saveButton;
     private Appointment appointment;
     private Customer customer;
@@ -50,7 +50,7 @@ public class AppointmentMaker implements Initializable {
         for (City city: CustomerDatabaseModel.getLocationList().getCityList()){
             cityChoices.add(city.getCityName());
         }
-        apptLocationChoice.setItems(cityChoices);
+        appointmentLocationChoice.setItems(cityChoices);
         loadBusinessHours();
     }
     private void loadBusinessHours(){
@@ -79,15 +79,15 @@ public class AppointmentMaker implements Initializable {
                 e.printStackTrace();
             }
         });
-        apptIdField.setText(appointment.getId()+"");
+        appointmentIdField.setText(appointment.getId()+"");
         appointmentCustomerName.setText(appointment.getAssociatedCustomer().getCustomerName());
         appointmentDescriptionField.setText(appointment.getDescription());
-        apptLocationChoice.setValue(appointment.getLocation());
-        apptContactField.setText(appointment.getContact());
-        apptURLField.setText(appointment.getUrl());
-        apptTitleField.setText(appointment.getTitle());
-        apptTypeField.setText(appointment.getType());
-        apptDateChoice.setValue(LocalDate.now());
+        appointmentLocationChoice.setValue(appointment.getLocation());
+        appointmentContactField.setText(appointment.getContact());
+        appointmentURLField.setText(appointment.getUrl());
+        appointmentTitleField.setText(appointment.getTitle());
+        appointmentTypeField.setText(appointment.getType());
+        appointmentDateChoice.setValue(LocalDate.now());
         appointmentTimeSlots.setValue("Select New Time");
     }
 
@@ -97,12 +97,12 @@ public class AppointmentMaker implements Initializable {
             CustomerDatabaseModel.makeNewAppointment(new Appointment(
                     CustomerDatabaseModel.getAppointmentTotal(),
                     customer,
-                    apptTitleField.getText(),
+                    appointmentTitleField.getText(),
                     appointmentDescriptionField.getText(),
-                    apptLocationChoice.getSelectionModel().getSelectedItem(),
-                    apptContactField.getText(),
-                    apptTypeField.getText(),
-                    apptURLField.getText(),
+                    appointmentLocationChoice.getSelectionModel().getSelectedItem(),
+                    appointmentContactField.getText(),
+                    appointmentTypeField.getText(),
+                    appointmentURLField.getText(),
                     Appointment.convertToUtcDateTime(makeTimeStamp()),
                     Appointment.convertToUtcDateTime(appointmentDuration())
             ));
@@ -113,14 +113,15 @@ public class AppointmentMaker implements Initializable {
     private void updateAppointment(ActionEvent actionEvent) throws IOException {
         if (validateAppointment()) {
             if (AlertUser.confirmDelete("Confirm Update?", "Are you sure you want to update your appointment?")) {
-                appointment.setTitle(apptTitleField.getText());
+                appointment.setTitle(appointmentTitleField.getText());
                 appointment.setDescription(appointmentDescriptionField.getText());
-                appointment.setLocation(apptLocationChoice.getSelectionModel().getSelectedItem());
-                appointment.setContact(apptContactField.getText());
-                appointment.setType(apptTypeField.getText());
-                appointment.setUrl(apptURLField.getText());
+                appointment.setLocation(appointmentLocationChoice.getSelectionModel().getSelectedItem());
+                appointment.setContact(appointmentContactField.getText());
+                appointment.setType(appointmentTypeField.getText());
+                appointment.setUrl(appointmentURLField.getText());
                 appointment.setStartTime(Appointment.convertToUtcDateTime(makeTimeStamp()));
                 appointment.setEndTime(Appointment.convertToUtcDateTime(appointmentDuration()));
+                CustomerDatabaseModel.updateAppointment(appointment);
                 exitWindow(actionEvent);
             }
         }
@@ -142,12 +143,12 @@ public class AppointmentMaker implements Initializable {
     }
     private boolean validateAppointment(){
         try {
-            apptTitleField.getText();
+            appointmentTitleField.getText();
             appointmentDescriptionField.getText();
-            apptLocationChoice.getSelectionModel().getSelectedItem();
-            apptContactField.getText();
-            apptTypeField.getText();
-            apptURLField.getText();
+            appointmentLocationChoice.getSelectionModel().getSelectedItem();
+            appointmentContactField.getText();
+            appointmentTypeField.getText();
+            appointmentURLField.getText();
             String time = Appointment.convertToUtcDateTime(makeTimeStamp());
             Appointment.convertToUtcDateTime(appointmentDuration());
 
@@ -168,7 +169,7 @@ public class AppointmentMaker implements Initializable {
         return true;
     }
     private String makeTimeStamp(){
-        LocalDate appointmentDate = apptDateChoice.getValue();
+        LocalDate appointmentDate = appointmentDateChoice.getValue();
         String appointmentTime = appointmentTimeSlots.getSelectionModel().getSelectedItem();
         switch (appointmentTime) {
             case "10 AM":
@@ -193,11 +194,10 @@ public class AppointmentMaker implements Initializable {
                 appointmentTime = " 09:00:00.0";
                 break;
         }
-        String time2 = appointmentDate + appointmentTime;
-        return time2;
+        return appointmentDate + appointmentTime;
     }
     private String appointmentDuration() { //1 hour
-        LocalDate appointmentDate = apptDateChoice.getValue();
+        LocalDate appointmentDate = appointmentDateChoice.getValue();
         String appointmentTime = appointmentTimeSlots.getSelectionModel().getSelectedItem();
         switch (appointmentTime) {
             case "10 AM":
