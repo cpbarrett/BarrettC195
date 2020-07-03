@@ -131,6 +131,10 @@ public class Appointment {
         Timestamp timestamp = Timestamp.valueOf(this.startTime);
         return timestamp.toLocalDateTime().getDayOfWeek();
     }
+    public int getAppointmentYear(){
+        Timestamp timestamp = Timestamp.valueOf(this.startTime);
+        return timestamp.toLocalDateTime().getYear();
+    }
     public int getAppointmentDayOfMonth(){
         Timestamp timestamp = Timestamp.valueOf(this.startTime);
         return timestamp.toLocalDateTime().getDayOfMonth();

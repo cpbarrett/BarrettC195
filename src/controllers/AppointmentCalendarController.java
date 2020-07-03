@@ -25,13 +25,14 @@ import java.time.Month;
 import java.util.ResourceBundle;
 
 public class AppointmentCalendarController implements Initializable {
-    @FXML TableView<Appointment> calendarAppointments;
-    @FXML TableColumn<Appointment, String> customerNames;
-    @FXML TableColumn<Appointment, String> appointmentLocation;
-    @FXML TableColumn<Appointment, DayOfWeek> appointmentWeek;
-    @FXML TableColumn<Appointment, Month> appointmentMonth;
-    @FXML TableColumn<Appointment, Integer> appointmentDate;
-    @FXML TableColumn<Appointment, LocalTime> appointmentTime;
+    @FXML private TableView<Appointment> calendarAppointments;
+    @FXML private TableColumn<Appointment, String> customerNames;
+    @FXML private TableColumn<Appointment, String> appointmentLocation;
+    @FXML private TableColumn<Appointment, Integer> appointmentYear;
+    @FXML private TableColumn<Appointment, DayOfWeek> appointmentWeekday;
+    @FXML private TableColumn<Appointment, Month> appointmentMonth;
+    @FXML private TableColumn<Appointment, Integer> appointmentDate;
+    @FXML private TableColumn<Appointment, LocalTime> appointmentTime;
     ObservableList<Appointment> calendar;
     @Override
     public void initialize(URL location, ResourceBundle resources) { createAppointmentsTable(); }
@@ -39,7 +40,8 @@ public class AppointmentCalendarController implements Initializable {
         calendar = FXCollections.observableArrayList();
         customerNames.setCellValueFactory(new PropertyValueFactory<>("name"));
         appointmentLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-        appointmentWeek.setCellValueFactory(new PropertyValueFactory<>("appointmentWeekday"));
+        appointmentYear.setCellValueFactory(new PropertyValueFactory<>("appointmentYear"));
+        appointmentWeekday.setCellValueFactory(new PropertyValueFactory<>("appointmentWeekday"));
         appointmentMonth.setCellValueFactory(new PropertyValueFactory<>("appointmentMonth"));
         appointmentDate.setCellValueFactory(new PropertyValueFactory<>("appointmentDayOfMonth"));
         appointmentTime.setCellValueFactory(new PropertyValueFactory<>("appointmentTime"));

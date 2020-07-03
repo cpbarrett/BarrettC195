@@ -34,14 +34,16 @@ public class Alarm implements Runnable{
     }
     private Timestamp findSoonestAppointment(){
         Timestamp soonest = Timestamp.valueOf("2021-01-01 00:00:00");
+        Timestamp rightNow = Timestamp.from(Instant.now());
         List<Timestamp> times = new ArrayList<>();
         for (Customer customer: CustomerDatabaseModel.getCustomerList().getAllCustomers()){
             for (Appointment appointment: customer.getCustomerAppointments()) {
                 times.add(Timestamp.valueOf(appointment.getStartTime()));
             }
         }
+
         for (Timestamp timestamp: times){
-            if (timestamp.after(times.get(0))) {
+            if (timestamp.after(rightNow)) {
                 if (timestamp.before(soonest)){
                     soonest = timestamp;
                 }
