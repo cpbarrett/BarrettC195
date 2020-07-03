@@ -125,6 +125,8 @@ public class AppointmentsController implements Initializable {
                     default:
                         break;
                 }
+            } else {
+                AlertUser.showError("Please select a report type.");
             }
         } catch (FileNotFoundException | NullPointerException ignored) {}
     }
