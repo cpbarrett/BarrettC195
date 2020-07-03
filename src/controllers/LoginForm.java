@@ -7,6 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -21,6 +23,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginForm implements Initializable {
+    @FXML private Label usernameLabel;
+    @FXML private Label passwordLabel;
+    @FXML private Button loginButton;
+    @FXML private Button exitButton;
     @FXML private TextField username;
     @FXML private PasswordField password;
     ResourceBundle resourceBundle;
@@ -32,6 +38,14 @@ public class LoginForm implements Initializable {
         } catch (FileNotFoundException e) {
             Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, e);
         }
+        this.resourceBundle = loadLanguageResources();
+        translateForm();
+    }
+    private void translateForm(){
+        usernameLabel.setText(resourceBundle.getString("usernameLabel"));
+        passwordLabel.setText(resourceBundle.getString("passwordLabel"));
+        loginButton.setText(resourceBundle.getString("loginButton"));
+        exitButton.setText(resourceBundle.getString("exitButton"));
     }
     public ResourceBundle loadLanguageResources() {
         switch (Locale.getDefault().getCountry().trim()) {
@@ -49,7 +63,7 @@ public class LoginForm implements Initializable {
     }
     private boolean checkLogin(String user, String passW) {
         if (user.matches("test") && passW.matches("test")){
-            printWriter.append("User: " + user + "Time: " + LocalDateTime.now());
+            printWriter.append("User: ").append(user).append("Time: ").append(String.valueOf(LocalDateTime.now()));
             printWriter.close();
             return true;
         } else {
