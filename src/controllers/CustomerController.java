@@ -1,8 +1,8 @@
 package controllers;
 
-import Model.City;
-import Model.Customer;
-import Model.CustomerDatabaseModel;
+import model.City;
+import model.Customer;
+import model.CustomerDatabaseModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

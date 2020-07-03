@@ -1,8 +1,8 @@
 package controllers;
 
-import Model.Appointment;
-import Model.Customer;
-import Model.CustomerDatabaseModel;
+import model.Appointment;
+import model.Customer;
+import model.CustomerDatabaseModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

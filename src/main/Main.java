@@ -1,6 +1,6 @@
 package main;
 
-import Model.CustomerDatabaseModel;
+import model.CustomerDatabaseModel;
 import controllers.LoginForm;
 import javafx.application.Application;
 import javafx.application.Platform;

@@ -1,7 +1,7 @@
 package controllers;
 
-import Model.Customer;
-import Model.CustomerDatabaseModel;
+import model.Customer;
+import model.CustomerDatabaseModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

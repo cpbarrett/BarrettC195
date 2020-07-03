@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 public class City {
     private final int cityId;

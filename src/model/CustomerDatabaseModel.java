@@ -1,7 +1,6 @@
-package Model;
+package model;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-import main.AlertUser;
 import main.Main;
 
 import java.io.FileInputStream;
@@ -52,11 +51,12 @@ public class CustomerDatabaseModel {
                     "select customer.customerId, customer.customerName, address.address, city.city, country.country, address.postalCode, address.phone from customer\n" +
                             "inner join address on address.addressId = customer.addressId\n" +
                             "inner join city on city.cityId = address.cityId\n" +
-                            "inner join country on city.countryId = country.countryId;"
+                            "inner join country on city.countryId = country.countryId\n" +
+                            "group by customerId;"
             );
             while(rs.next()){
                 CustomerDatabaseModel.getCustomerList().addCustomer(new Customer(
-                        Integer.parseInt(rs.getString("customerId")),
+                        rs.getInt("customerId"),
                         rs.getString("customerName"),
                         rs.getString("address"),
                         rs.getString("city"),
@@ -71,7 +71,7 @@ public class CustomerDatabaseModel {
             );
             while (rs.next()){
                 locationList.addCity(new City(
-                        Integer.parseInt(rs.getString("cityId")),
+                        rs.getInt("cityId"),
                         rs.getString("city"),
                         rs.getString("country")
                 ));
@@ -80,10 +80,10 @@ public class CustomerDatabaseModel {
                     "SELECT * FROM appointment;"
             );
             while (rs.next()){
-                customerList.lookupCustomer(Integer.parseInt(rs.getString("customerId"))-1).addAppointment(
+                customerList.lookupCustomer(rs.getInt("customerId")-1).addAppointment(
                     (new Appointment(
-                            Integer.parseInt(rs.getString("appointmentId")),
-                            customerList.lookupCustomer(Integer.parseInt(rs.getString("customerId"))-1),
+                            rs.getInt("appointmentId"),
+                            customerList.lookupCustomer(rs.getInt("customerId")-1),
                             rs.getString("title"),
                             rs.getString("description"),
                             rs.getString("location"),
@@ -175,7 +175,7 @@ public class CustomerDatabaseModel {
             ResultSet rs = ps.executeQuery();
             rs.next();
             final String insertCustomer = "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdateBy) VALUES\n" +
-            "('" + customer.getCustomerName() + "', " + Integer.parseInt(rs.getString(1)) + ", 1, now(), 'U07Stq', 'U07Stq');";
+            "('" + customer.getCustomerName() + "', " + rs.getInt(1) + ", 1, now(), 'U07Stq', 'U07Stq');";
             ps = connect.prepareStatement(insertCustomer);
             ps.execute();
             ps.close();
@@ -212,7 +212,7 @@ public class CustomerDatabaseModel {
             rs.next();
             final String sqlUpdateCustomer = "UPDATE customer SET " +
                     "customerName = '" + customer.getCustomerName() + "', " +
-                    "addressId = " + Integer.parseInt(rs.getString(1)) + ", " +
+                    "addressId = " + rs.getInt(1) + ", " +
                     "active = 1, createDate = now(), createdBy = 'U07Stq', lastUpdateBy = 'U07Stq'" +
                     "WHERE customerId = " + customer.getId() + ";";
             ps = connect.prepareStatement(sqlUpdateCustomer);

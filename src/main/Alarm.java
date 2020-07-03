@@ -1,8 +1,8 @@
 package main;
 
-import Model.Appointment;
-import Model.Customer;
-import Model.CustomerDatabaseModel;
+import model.Appointment;
+import model.Customer;
+import model.CustomerDatabaseModel;
 import javafx.application.Platform;
 
 import java.sql.Timestamp;
