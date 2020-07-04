@@ -103,7 +103,7 @@ public class AppointmentMaker implements Initializable {
 
     @FXML
     private void saveAppointment(ActionEvent actionEvent) throws IOException {
-        if (validateAppointment()){
+        if (validateNewAppointment()){
             CustomerDatabaseModel.makeNewAppointment(new Appointment(
                     CustomerDatabaseModel.getAppointmentTotal(),
                     customer,
@@ -121,7 +121,7 @@ public class AppointmentMaker implements Initializable {
     }
     @FXML
     private void updateAppointment(ActionEvent actionEvent) throws IOException {
-        if (validateAppointment()) {
+        if (validateUpdate()) {
             if (AlertUser.confirmDelete("Confirm Update?", "Are you sure you want to update your appointment?")) {
                 appointment.setTitle(appointmentTitleField.getText());
                 appointment.setDescription(appointmentDescriptionField.getText());
@@ -153,33 +153,70 @@ public class AppointmentMaker implements Initializable {
     }
     private boolean validateAppointment(){
         try {
-            appointmentTitleField.getText();
-            appointmentDescriptionField.getText();
-            appointmentLocationChoice.getSelectionModel().getSelectedItem();
-            appointmentContactField.getText();
-            appointmentTypeField.getText();
-            appointmentURLField.getText();
-            String time = Appointment.convertToUtcDateTime(makeTimeStamp());
-            Appointment.convertToUtcDateTime(appointmentDuration());
-
-            for (Customer customer: CustomerDatabaseModel.getCustomerList().getAllCustomers()){
-                for (Appointment appointment: customer.getCustomerAppointments()) {
-                    if (time.matches(this.appointment.getStartTime())){
-                        return true;
-                    }
-                    if (time.matches(appointment.getStartTime())){
-                        AlertUser.showError("Appointment time is already taken please pick another time.");
-                        return false;
-                    }
-                }
+            if (appointmentTitleField.getText().isEmpty()) {
+                appointmentTitleField.setText("not needed");
             }
-
-
+            if (appointmentDescriptionField.getText().isEmpty()) {
+                appointmentDescriptionField.setText("not needed");
+            }
+            if (appointmentContactField.getText().isEmpty()) {
+                appointmentContactField.setText("not needed");
+            }
+            if (appointmentURLField.getText().isEmpty()){
+                appointmentURLField.setText("not needed");
+            }
+            if (appointmentLocationChoice.getSelectionModel().getSelectedItem().isEmpty()){
+                AlertUser.showError("Please pick a location.");
+                return false;
+            }
+            if (appointmentTypeField.getText().isEmpty()) {
+                AlertUser.showError("Please enter Appointment Type.");
+                return false;
+            }
+            if (appointmentTitleField.getText().length() > 255) {
+                AlertUser.showError("Title is too long.");
+                return false;
+            }
+            if (appointmentURLField.getText().length() > 255) {
+                AlertUser.showError("URL is too long.");
+                return false;
+            }
         } catch (NullPointerException e){
             e.printStackTrace();
             AlertUser.showError("Ensure that no appointment fields are blank.");
         }
         return true;
+    }
+    private boolean validateNewAppointment(){
+        String time = Appointment.convertToUtcDateTime(makeTimeStamp());
+        Appointment.convertToUtcDateTime(appointmentDuration());
+        for (Customer customer : CustomerDatabaseModel.getCustomerList().getAllCustomers()) {
+            for (Appointment appointment : customer.getCustomerAppointments()) {
+                if (time.matches(appointment.getStartTime())) {
+                    AlertUser.showError("Appointment time is already taken please pick another time.");
+                    return false;
+                }
+            }
+        }
+        return validateAppointment();
+    }
+    private boolean validateUpdate(){
+        String time = Appointment.convertToUtcDateTime(makeTimeStamp());
+        Appointment.convertToUtcDateTime(appointmentDuration());
+
+        if (time.matches(this.appointment.getStartTime())){
+            return validateAppointment();
+        } else {
+            for (Customer customer : CustomerDatabaseModel.getCustomerList().getAllCustomers()) {
+                for (Appointment appointment : customer.getCustomerAppointments()) {
+                    if (time.matches(appointment.getStartTime())) {
+                        AlertUser.showError("Appointment time is already taken please pick another time.");
+                        return false;
+                    }
+                }
+            }
+        }
+        return validateAppointment();
     }
     private String makeTimeStamp(){
         LocalDate appointmentDate = appointmentDateChoice.getValue();

@@ -20,10 +20,10 @@ public class Alarm implements Runnable{
             long a = findSoonestAppointment().toLocalDateTime().toInstant(ZoneOffset.UTC).toEpochMilli();
             long b = Instant.now().toEpochMilli();
             long time = a - b;
-            System.out.println("Seconds until Alarm rings: " + time /1000);
             if (time < 0) {
                 return;
             }
+            System.out.println("Seconds until Alarm rings: " + time /1000);
             Thread.sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package controllers;
 
+import main.Main;
 import model.Customer;
 import model.CustomerDatabaseModel;
 import javafx.event.ActionEvent;
@@ -31,10 +32,11 @@ public class CustomerDatabaseController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle rb) {
-            if (!CustomerDatabaseModel.isConnected()) {
-                CustomerDatabaseModel.getConnected();
-            }
+        if (!CustomerDatabaseModel.isConnected()) {
+            CustomerDatabaseModel.getConnected();
+        }
         createTable();
+        Main.setAlarm();
     }
     private void createTable(){
         customerId.setCellValueFactory(new PropertyValueFactory<>("id"));
