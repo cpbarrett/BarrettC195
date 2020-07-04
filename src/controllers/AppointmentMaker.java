@@ -164,6 +164,9 @@ public class AppointmentMaker implements Initializable {
 
             for (Customer customer: CustomerDatabaseModel.getCustomerList().getAllCustomers()){
                 for (Appointment appointment: customer.getCustomerAppointments()) {
+                    if (time.matches(this.appointment.getStartTime())){
+                        return true;
+                    }
                     if (time.matches(appointment.getStartTime())){
                         AlertUser.showError("Appointment time is already taken please pick another time.");
                         return false;
