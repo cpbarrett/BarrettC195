@@ -87,7 +87,7 @@ public class AppointmentMaker implements Initializable {
         appointmentURLField.setText(appointment.getUrl());
         appointmentTitleField.setText(appointment.getTitle());
         appointmentTypeField.setText(appointment.getType());
-        appointmentDateChoice.setValue(LocalDate.now());
+        appointmentDateChoice.setValue(appointment.getAppointmentDate());
         appointmentTimeSlots.setValue("Select New Time");
     }
 

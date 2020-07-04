@@ -147,4 +147,9 @@ public class Appointment {
         localDateTime = localZonedDateTime.toLocalDateTime();
         return localDateTime.toLocalTime();
     }
+    public LocalDate getAppointmentDate(){
+        Timestamp timestamp = Timestamp.valueOf(this.startTime);
+        LocalDateTime localDateTime = timestamp.toLocalDateTime();
+        return localDateTime.toLocalDate();
+    }
 }
