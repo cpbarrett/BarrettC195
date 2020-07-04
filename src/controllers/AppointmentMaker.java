@@ -88,7 +88,17 @@ public class AppointmentMaker implements Initializable {
         appointmentTitleField.setText(appointment.getTitle());
         appointmentTypeField.setText(appointment.getType());
         appointmentDateChoice.setValue(appointment.getAppointmentDate());
-        appointmentTimeSlots.setValue("Select New Time");
+        setAppointmentTime();
+    }
+    private void setAppointmentTime(){
+        int hour = appointment.getAppointmentTime().getHour();
+        String timeSlot = " AM";
+       if (hour < 12){
+           timeSlot = hour + timeSlot;
+       } else {
+           timeSlot = (hour-12) + " PM";
+       }
+        appointmentTimeSlots.getSelectionModel().select(timeSlot);
     }
 
     @FXML
