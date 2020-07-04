@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class Main extends Application {
     public static void setAlarm() {
         Alarm alarm = new Alarm();
-        new Thread(alarm).start();
+        new Thread(alarm);
     }
 
     @Override

@@ -54,6 +54,14 @@ public class AppointmentCalendarController implements Initializable {
         }
     }
     @FXML
+    private void sortByMonth(){
+        calendarAppointments.getSortOrder().add(appointmentMonth);
+    }
+    @FXML
+    private void sortByWeek(){
+        calendarAppointments.getSortOrder().add(appointmentWeekday);
+    }
+    @FXML
     private void exitWindow(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/CustomerDatabaseView.fxml"));
         Parent customerUI = loader.load();

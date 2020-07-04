@@ -1,6 +1,5 @@
 package controllers;
 
-import main.Main;
 import model.Customer;
 import model.CustomerDatabaseModel;
 import javafx.event.ActionEvent;
@@ -36,7 +35,6 @@ public class CustomerDatabaseController implements Initializable {
             CustomerDatabaseModel.getConnected();
         }
         createTable();
-        Main.setAlarm();
     }
     private void createTable(){
         customerId.setCellValueFactory(new PropertyValueFactory<>("id"));

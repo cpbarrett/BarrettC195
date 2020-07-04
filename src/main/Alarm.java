@@ -1,5 +1,4 @@
 package main;
-
 import model.Appointment;
 import model.Customer;
 import model.CustomerDatabaseModel;
@@ -12,25 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Alarm implements Runnable{
-    public Alarm(){
-    }
+    public Alarm(){}
     @Override
     public void run() {
         try {
-            long a = findSoonestAppointment().toLocalDateTime().toInstant(ZoneOffset.UTC).toEpochMilli();
-            long b = Instant.now().toEpochMilli();
-            long time = a - b;
-            if (time < 0) {
-                return;
+            long time = checkTime();
+            while (time > 10){
+                Thread.sleep(time / 10);
+                time = checkTime();
             }
-            System.out.println("Seconds until Alarm rings: " + time /1000);
-            Thread.sleep(time);
+            if (time < 10 && time >= 0) {
+                alert();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //This lambda is required in order to make use of the Platform.runLater method.
-        //This method runs alert on the main gui thread instead of the alarm timer thread
-        Platform.runLater(() -> alert());
     }
     private Timestamp findSoonestAppointment(){
         Timestamp soonest = Timestamp.valueOf("2021-01-01 00:00:00");
@@ -51,7 +46,18 @@ public class Alarm implements Runnable{
         }
         return soonest;
     }
+    private long checkTime(){
+        long a = findSoonestAppointment().toLocalDateTime().toInstant(ZoneOffset.UTC).toEpochMilli();
+        long b = Instant.now().toEpochMilli();
+        long time = a - b;
+        if (time >= 1000) {
+            System.out.println("Seconds until Alarm rings: " + time /1000);
+        }
+        return time;
+    }
     private void alert(){
-        AlertUser.display("Alert", "Appointment Time! Click ok to start web cam.");
+        //This lambda is required in order to make use of the Platform.runLater method.
+        //This method runs alert on the main gui thread instead of the alarm timer thread
+        Platform.runLater(() -> AlertUser.display("Alert", "Appointment Time! Click ok to start web cam."));
     }
 }

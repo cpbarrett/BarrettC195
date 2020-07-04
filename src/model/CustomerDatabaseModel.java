@@ -99,6 +99,7 @@ public class CustomerDatabaseModel {
             connected = true;
             fileInputStream.close();
             rs.close();
+            Main.setAlarm();
         } catch (SQLException | ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
