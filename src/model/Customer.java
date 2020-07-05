@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Customer {
-    private int id;
+    private final int id;
     private final String customerName;
     private final String address;
     private final String city;
@@ -47,9 +47,6 @@ public class Customer {
 
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-    public void setId(int id){
-        this.id = id;
     }
 
     public ObservableList<Appointment> getCustomerAppointments() {

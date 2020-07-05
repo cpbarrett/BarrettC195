@@ -52,8 +52,7 @@ public class Alarm implements Runnable{
     private long checkTime(){
         long a = findSoonestAppointment().toInstant().toEpochMilli();
         long b = Instant.now().toEpochMilli();
-        long time = a - b;
-        return time;
+        return a - b;
     }
     private void alert(){
         //This lambda is required in order to make use of the Platform.runLater method.

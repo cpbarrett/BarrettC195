@@ -1,6 +1,5 @@
 package controllers;
 
-import javafx.collections.ObservableList;
 import model.Customer;
 import model.CustomerDatabaseModel;
 import javafx.event.ActionEvent;
