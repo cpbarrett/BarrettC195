@@ -65,7 +65,7 @@ public class AppointmentMaker implements Initializable {
     }
 
     public void loadCustomer(int customerId){
-        this.customer = CustomerDatabaseModel.getCustomerList().lookupCustomer(customerId-1);
+        this.customer = CustomerDatabaseModel.getCustomerList().lookupCustomer(customerId);
         appointmentCustomerName.setText(customer.getCustomerName());
     }
 
@@ -105,7 +105,7 @@ public class AppointmentMaker implements Initializable {
     private void saveAppointment(ActionEvent actionEvent) throws IOException {
         if (validateNewAppointment()){
             CustomerDatabaseModel.makeNewAppointment(new Appointment(
-                    CustomerDatabaseModel.getAppointmentTotal(),
+                    CustomerDatabaseModel.getAppointmentNewId(),
                     customer,
                     appointmentTitleField.getText(),
                     appointmentDescriptionField.getText(),
@@ -190,7 +190,7 @@ public class AppointmentMaker implements Initializable {
     private boolean validateNewAppointment(){
         String time = Appointment.convertToUtcDateTime(makeTimeStamp());
         Appointment.convertToUtcDateTime(appointmentDuration());
-        for (Customer customer : CustomerDatabaseModel.getCustomerList().getAllCustomers()) {
+        for (Customer customer : CustomerDatabaseModel.getCustomerList().getCustomerObservableList()) {
             for (Appointment appointment : customer.getCustomerAppointments()) {
                 if (time.matches(appointment.getStartTime())) {
                     AlertUser.showError("Appointment time is already taken please pick another time.");
@@ -207,7 +207,7 @@ public class AppointmentMaker implements Initializable {
         if (time.matches(this.appointment.getStartTime())){
             return validateAppointment();
         } else {
-            for (Customer customer : CustomerDatabaseModel.getCustomerList().getAllCustomers()) {
+            for (Customer customer : CustomerDatabaseModel.getCustomerList().getCustomerObservableList()) {
                 for (Appointment appointment : customer.getCustomerAppointments()) {
                     if (time.matches(appointment.getStartTime())) {
                         AlertUser.showError("Appointment time is already taken please pick another time.");

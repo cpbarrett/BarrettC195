@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.collections.ObservableList;
 import model.Customer;
 import model.CustomerDatabaseModel;
 import javafx.event.ActionEvent;
@@ -44,7 +45,7 @@ public class CustomerDatabaseController implements Initializable {
         customerCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
         customerPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        customers.setItems(CustomerDatabaseModel.getCustomerList().getAllCustomers());
+        customers.setItems(CustomerDatabaseModel.getCustomerList().getCustomerObservableList());
     }
 
     @FXML
@@ -67,6 +68,7 @@ public class CustomerDatabaseController implements Initializable {
     private void deleteCustomerAction(ActionEvent actionEvent){
         if (AlertUser.confirmDelete("Confirm Delete?", "Are you sure you want to delete this customer?")){
             CustomerDatabaseModel.deleteCustomerDB(customers.getSelectionModel().getSelectedItem());
+            customers.setItems(CustomerDatabaseModel.getCustomerList().getCustomerObservableList());
         }
     }
     @FXML

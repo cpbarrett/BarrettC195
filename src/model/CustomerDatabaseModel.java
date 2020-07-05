@@ -12,12 +12,8 @@ import java.util.Properties;
 public class CustomerDatabaseModel {
     private static CustomerList customerList;
     private static LocationList locationList;
-    private static int appointmentTotal = 1;
     private static boolean connected = false;
     private static Connection connect;
-    public static int getAppointmentTotal(){
-        return appointmentTotal;
-    }
     public static Connection getConnection(){
         return connect;
     }
@@ -61,7 +57,7 @@ public class CustomerDatabaseModel {
                         rs.getString("address"),
                         rs.getString("city"),
                         rs.getString("country"),
-                        Integer.parseInt(rs.getString("postalCode")),
+                        rs.getInt("postalCode"),
                         rs.getString("phone")
                 ));
             }
@@ -80,10 +76,10 @@ public class CustomerDatabaseModel {
                     "SELECT * FROM appointment;"
             );
             while (rs.next()){
-                customerList.lookupCustomer(rs.getInt("customerId")-1).addAppointment(
+                customerList.lookupCustomer(rs.getInt("customerId")).addAppointment(
                     (new Appointment(
                             rs.getInt("appointmentId"),
-                            customerList.lookupCustomer(rs.getInt("customerId")-1),
+                            customerList.lookupCustomer(rs.getInt("customerId")),
                             rs.getString("title"),
                             rs.getString("description"),
                             rs.getString("location"),
@@ -93,7 +89,6 @@ public class CustomerDatabaseModel {
                             rs.getString("start"),
                             rs.getString("end")
                 )));
-                appointmentTotal++;
             }
             System.out.println("Connection Successful!");
             connected = true;
@@ -109,7 +104,7 @@ public class CustomerDatabaseModel {
         try{
             final String insertAppointment = "INSERT INTO appointment VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = connect.prepareStatement(insertAppointment);
-            ps.setInt(1, appointmentTotal++);
+            ps.setInt(1, getAppointmentNewId());
             ps.setInt(2, customerId);
             ps.setInt(3, 1);
             ps.setString(4, appointment.getTitle());
@@ -129,7 +124,7 @@ public class CustomerDatabaseModel {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        customerList.lookupCustomer(customerId-1).addAppointment(appointment);
+        customerList.lookupCustomer(customerId).addAppointment(appointment);
     }
     public static void updateAppointment(Appointment appointment) {
         try {
@@ -161,34 +156,62 @@ public class CustomerDatabaseModel {
             e.printStackTrace();
         }
         appointment.getAssociatedCustomer().deleteAppointment(appointment);
-        appointmentTotal--;
+    }
+    private static void insertNewAddress(Customer customer){
+        try {
+            final String insertAddress = "INSERT INTO address VALUES (?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement sqlInsertAddress = connect.prepareStatement(insertAddress);
+            sqlInsertAddress.setInt(1, customer.getId());
+            sqlInsertAddress.setString(2, customer.getAddress());
+            sqlInsertAddress.setString(3," ");
+            sqlInsertAddress.setInt(4, locationList.lookupCity(customer.getCity()).getCityId());
+            sqlInsertAddress.setInt(5, customer.getPostalCode());
+            sqlInsertAddress.setString(6, customer.getPhoneNumber());
+            sqlInsertAddress.setTimestamp(7, Timestamp.from(Instant.now()));
+            sqlInsertAddress.setString(8, "U07Stq");
+            sqlInsertAddress.setTimestamp(9, Timestamp.from(Instant.now()));
+            sqlInsertAddress.setString(10, "U07Stq");
+            sqlInsertAddress.execute();
+            sqlInsertAddress.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
     public static void insertNewCustomer(Customer customer){
         customerList.addCustomer(customer);
+        insertNewAddress(customer);
         try {
-            final String insertAddress = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdateBy) VALUES\n" +
-                    "('" + customer.getAddress() + "' , ' ', " + locationList.lookupCity(customer.getCity()).getCityId() + ", " +
-                    customer.getPostalCode() + ", '" + customer.getPhoneNumber() + "', now(), 'U07Stq', 'U07Stq');";
-            PreparedStatement ps = connect.prepareStatement(insertAddress);
-            ps.execute();
-            ps = connect.prepareStatement("SELECT LAST_INSERT_ID() FROM address");
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            final String insertCustomer = "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdateBy) VALUES\n" +
-            "('" + customer.getCustomerName() + "', " + rs.getInt(1) + ", 1, now(), 'U07Stq', 'U07Stq');";
-            ps = connect.prepareStatement(insertCustomer);
-            ps.execute();
-            ps.close();
-            rs.close();
+//            final String insertAddress = "INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdateBy) VALUES\n" +
+//                    "('" + customer.getAddress() + "' , ' ', " + locationList.lookupCity(customer.getCity()).getCityId() + ", " +
+//                    customer.getPostalCode() + ", '" + customer.getPhoneNumber() + "', now(), 'U07Stq', 'U07Stq');";
+//            final String insertCustomer = "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdateBy) VALUES\n" +
+//            "('" + customer.getCustomerName() + "', " + addressId.getInt(1) + ", 1, now(), 'U07Stq', 'U07Stq');";
+            final String insertCustomer = "INSERT INTO customer VALUES (?,?,?,?,?,?,?,?)";
+            PreparedStatement sqlInsertCustomer = connect.prepareStatement(insertCustomer);
+            sqlInsertCustomer.setInt(1, customer.getId());
+            sqlInsertCustomer.setString(2, customer.getCustomerName());
+            sqlInsertCustomer.setInt(3,customer.getId());
+            sqlInsertCustomer.setInt(4, 1);
+            sqlInsertCustomer.setTimestamp(5, Timestamp.from(Instant.now()));
+            sqlInsertCustomer.setString(6, "U07Stq");
+            sqlInsertCustomer.setTimestamp(7, Timestamp.from(Instant.now()));
+            sqlInsertCustomer.setString(8, "U07Stq");
+            sqlInsertCustomer.execute();
+            sqlInsertCustomer.close();
         } catch (SQLException ex) { //logging?
             ex.printStackTrace();
         }
     }
     public static void deleteCustomerDB(Customer customer){
         customerList.deleteCustomer(customer);
+        final String sqlDeleteAppointments = "DELETE FROM appointment WHERE customerId = " + customer.getId() + ";";
         final String sqlDeleteCustomer = "DELETE FROM customer WHERE customerId = " + customer.getId() + ";";
         final String sqlDeleteAddress = "DELETE FROM address WHERE addressId = " + customer.getId() + ";";
         try {
+            if (!customer.getCustomerAppointments().isEmpty()) {
+                connect.createStatement().execute(sqlDeleteAppointments);
+            }
             connect.createStatement().execute(sqlDeleteCustomer);
             connect.createStatement().execute(sqlDeleteAddress);
         } catch (SQLException ex) { //logging?
@@ -196,7 +219,7 @@ public class CustomerDatabaseModel {
         }
     }
     public static void updateCustomerDB(Customer customer){
-        customerList.updateCustomer(customer.getId()-1, customer);
+        customerList.updateCustomer(customer);
         try {
             final String sqlUpdateAddress = "UPDATE address SET " +
                     "address = '" + customer.getAddress() + "', " +
@@ -207,21 +230,29 @@ public class CustomerDatabaseModel {
                    "WHERE addressId = " + customer.getId() + ";";
             PreparedStatement ps = connect.prepareStatement(sqlUpdateAddress);
             ps.execute();
-            ps = connect.prepareStatement("SELECT LAST_INSERT_ID() FROM address");
-            ResultSet rs = ps.executeQuery();
-            rs.next();
+
             final String sqlUpdateCustomer = "UPDATE customer SET " +
                     "customerName = '" + customer.getCustomerName() + "', " +
-                    "addressId = " + rs.getInt(1) + ", " +
+                    "addressId = " + customer.getId() + ", " +
                     "active = 1, createDate = now(), createdBy = 'U07Stq', lastUpdateBy = 'U07Stq'" +
                     "WHERE customerId = " + customer.getId() + ";";
             ps = connect.prepareStatement(sqlUpdateCustomer);
             ps.execute();
             ps.close();
-            rs.close();
         } catch (SQLException ex) { //logging?
             ex.printStackTrace();
         }
+    }
+    public static int getAppointmentNewId(){
+        int appointmentLastId = 0;
+        for (Customer customer : customerList.getCustomerObservableList()){
+            for (Appointment appointment : customer.getCustomerAppointments()){
+                if (appointment.getId() > appointmentLastId) {
+                    appointmentLastId = appointment.getId();
+                }
+            }
+        }
+        return ++appointmentLastId;
     }
 }
 

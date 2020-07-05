@@ -1,5 +1,7 @@
 package controllers;
 
+import javafx.scene.control.DatePicker;
+import main.AlertUser;
 import model.Appointment;
 import model.Customer;
 import model.CustomerDatabaseModel;
@@ -20,6 +22,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.ResourceBundle;
@@ -33,6 +36,7 @@ public class AppointmentCalendarController implements Initializable {
     @FXML private TableColumn<Appointment, Month> appointmentMonth;
     @FXML private TableColumn<Appointment, Integer> appointmentDate;
     @FXML private TableColumn<Appointment, LocalTime> appointmentTime;
+    @FXML private DatePicker selectedDate;
     ObservableList<Appointment> calendar;
     @Override
     public void initialize(URL location, ResourceBundle resources) { createAppointmentsTable(); }
@@ -49,17 +53,46 @@ public class AppointmentCalendarController implements Initializable {
         calendarAppointments.setItems(calendar);
     }
     private void populateCalendar(){
-        for (Customer customer: CustomerDatabaseModel.getCustomerList().getAllCustomers()){
+        for (Customer customer: CustomerDatabaseModel.getCustomerList().getCustomerObservableList()){
             calendar.addAll(customer.getCustomerAppointments());
         }
     }
-    @FXML
-    private void sortByMonth(){
-        calendarAppointments.getSortOrder().add(appointmentMonth);
+    private boolean validDate(){
+        if (selectedDate.getValue() != null){
+            return true;
+        } else {
+            AlertUser.showError("Please select a date first.");
+            return false;
+        }
     }
     @FXML
-    private void sortByWeek(){
-        calendarAppointments.getSortOrder().add(appointmentWeekday);
+    private void monthView(){
+        if (validDate()){
+            calendar.clear();
+            for (Customer customer: CustomerDatabaseModel.getCustomerList().getCustomerObservableList()){
+                for (Appointment appointment : customer.getCustomerAppointments()){
+                    if (appointment.getAppointmentDate().getMonthValue() == selectedDate.getValue().getMonthValue()) {
+                        calendar.add(appointment);
+                    }
+                }
+            }
+            calendarAppointments.setItems(calendar);
+        }
+    }
+    @FXML
+    private void weekView(){
+        if (validDate()){
+            calendar.clear();
+            for (Customer customer: CustomerDatabaseModel.getCustomerList().getCustomerObservableList()){
+                for (Appointment appointment : customer.getCustomerAppointments()){
+                    if (appointment.getAppointmentDate().isAfter(selectedDate.getValue().minusDays(1)))
+                        if (appointment.getAppointmentDate().isBefore(selectedDate.getValue().plusDays(8))) {
+                            calendar.add(appointment);
+                        }
+                }
+            }
+            calendarAppointments.setItems(calendar);
+        }
     }
     @FXML
     private void exitWindow(ActionEvent actionEvent) throws IOException {

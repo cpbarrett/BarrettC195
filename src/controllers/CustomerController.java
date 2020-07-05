@@ -65,8 +65,9 @@ public class CustomerController implements Initializable {
         if (validateCustomerEntry()) {
             String selectedCity = customerCityChoice.getSelectionModel().getSelectedItem();
             City choice = CustomerDatabaseModel.getLocationList().lookupCity(selectedCity);
+            int newId = CustomerDatabaseModel.getCustomerList().getCustomerObservableList().get(CustomerDatabaseModel.getCustomerList().getCustomerObservableList().size()-1).getId();
             Customer newCustomer = new Customer(
-                    CustomerDatabaseModel.getCustomerList().getAllCustomers().size() + 1,
+                    newId+1,
                     customerNameField.getText(),
                     customerAddressField.getText(),
                     choice.getCityName(),
