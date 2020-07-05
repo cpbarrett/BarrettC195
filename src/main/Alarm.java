@@ -10,30 +10,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Alarm implements Runnable{
-    public Alarm(){}
+    private Timestamp soonest;
+    public Alarm(){
+        soonest = Timestamp.valueOf("2030-01-01 00:00:00");
+    }
     @Override
     public void run() {
         try {
             long time = checkTime();
-            System.out.println("Alarm Set");
+            checkAlarm();
             while (time > 1000){
                 Thread.sleep(1000);
                 time = checkTime();
-//                System.out.println("Time " + time);
             }
             if (time < 1000 && time > 0) {
-                Thread.sleep(500);
+                Thread.sleep(1000);
                 alert();
-                Main.setAlarm();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
     private Timestamp findSoonestAppointment(){
-        Timestamp soonest = Timestamp.valueOf("2021-01-01 00:00:00");
         Timestamp rightNow = Timestamp.from(Instant.now());
         List<Timestamp> times = new ArrayList<>();
+
         for (Customer customer: CustomerDatabaseModel.getCustomerList().getCustomerObservableList()){
             for (Appointment appointment: customer.getCustomerAppointments()) {
                 times.add(Timestamp.valueOf(appointment.getLocalDateStartTime()));
@@ -57,6 +58,12 @@ public class Alarm implements Runnable{
     private void alert(){
         //This lambda is required in order to make use of the Platform.runLater method.
         //This method runs alert on the main gui thread instead of the alarm timer thread
-        Platform.runLater(() -> AlertUser.display("Alert", "Appointment Time! Click ok to start web cam."));
+        Platform.runLater(() -> {
+            AlertUser.display("Alert", "Appointment Time! Click ok to start web cam.");
+            Main.setAlarm();
+        });
+    }
+    private void checkAlarm(){
+        System.out.println("Alarm Set For: " + soonest);
     }
 }
