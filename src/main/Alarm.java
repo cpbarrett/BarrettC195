@@ -4,6 +4,7 @@ import model.Customer;
 import model.CustomerDatabaseModel;
 import javafx.application.Platform;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class Alarm implements Runnable{
         try {
             long time = checkTime();
             checkAlarm();
+            loginCheck();
             while (time > 1000){
                 Thread.sleep(1000);
                 time = checkTime();
@@ -63,7 +65,25 @@ public class Alarm implements Runnable{
             Main.setAlarm();
         });
     }
+    private void alert(String name){
+        Platform.runLater(() -> {
+            AlertUser.display("Appointment Soon!", "An alarm has been set for " + name + "'s appointment in 15 minutes.");
+        });
+    }
     private void checkAlarm(){
         System.out.println("Alarm Set For: " + soonest);
+    }
+    private void loginCheck(){
+        if (checkTime() < 900001) {
+            String name = "Someone";
+            for (Customer customer : CustomerDatabaseModel.getCustomerList().getCustomerObservableList()) {
+                for (Appointment appointment : customer.getCustomerAppointments()) {
+                    if (appointment.getLocalDateStartTime().matches(soonest.toString())){
+                        name = customer.getCustomerName();
+                    }
+                }
+            }
+            alert(name);
+        }
     }
 }
