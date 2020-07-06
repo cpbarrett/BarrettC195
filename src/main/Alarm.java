@@ -4,7 +4,6 @@ import model.Customer;
 import model.CustomerDatabaseModel;
 import javafx.application.Platform;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -66,9 +65,7 @@ public class Alarm implements Runnable{
         });
     }
     private void alert(String name){
-        Platform.runLater(() -> {
-            AlertUser.display("Appointment Soon!", "An alarm has been set for " + name + "'s appointment in 15 minutes.");
-        });
+        Platform.runLater(() -> AlertUser.display("Appointment Soon!", "An alarm has been set for " + name + "'s appointment in 15 minutes."));
     }
     private void checkAlarm(){
         System.out.println("Alarm Set For: " + soonest);
