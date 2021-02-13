@@ -1,6 +1,6 @@
 package model;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import main.Main;
 
 import java.io.FileInputStream;
